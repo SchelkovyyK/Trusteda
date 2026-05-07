@@ -1,0 +1,144 @@
+/* === UPLOAD BLOCK === */
+.upload-block {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* FILE */
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.file-upload input[type="file"] {
+  display: none;
+}
+
+.file-label {
+  padding: 10px 16px;
+  background: var(--primary);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.file-label:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+#file-name {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* BUTTONS */
+.upload-block button {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.upload-block button:first-of-type {
+  background: var(--primary);
+  color: white;
+}
+
+.upload-block button:last-of-type {
+  background: var(--accent);
+  color: white;
+}
+
+.upload-block button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* SELECTS */
+.upload-block select {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+.upload-block select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* RESULT */
+#result {
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--bg-main);
+  border: 1px solid #ccc;
+  font-size: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  font-family: monospace;
+}
+.drop-zone {
+  border: 2px dashed var(--text-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  transition: 0.2s;
+}
+
+.drop-zone:hover {
+  border-color: var(--primary);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.drop-zone.active {
+  border-color: var(--accent);
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.file-item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.file-item:hover {
+  border-color: var(--primary);
+}
+
+.file-item.active {
+  border: 2px solid var(--accent);
+}
+
+.file-top {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.file-id {
+  font-size: 12px;
+  color: gray;
+}
