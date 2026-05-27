@@ -21,7 +21,6 @@ class FileService:
         with open(file_path, "wb") as f:
             f.write(content)
 
-        # store metadata file (optional but recommended)
         meta_path = os.path.join(UPLOAD_DIR, "meta.json")
 
         meta = []
@@ -54,30 +53,37 @@ class FileService:
 
         return pd.read_csv(file_path, sep=None, engine="python")
     
-    @staticmethod
+    @staticmethod   
     def list_files():
         meta_path = os.path.join(UPLOAD_DIR, "meta.json")
 
         if not os.path.exists(meta_path):
             return []
 
-        with open(meta_path, "r") as f:
-            return json.load(f)
-            files = []
+        try:
+            with open(meta_path, "r") as f:
+                return json.load(f)
 
-            for filename in os.listdir(UPLOAD_DIR):
-                if filename.endswith(".csv"):
-                    file_path = os.path.join(UPLOAD_DIR, filename)
-                    file_id = filename.replace(".csv", "")
+        except json.JSONDecodeError:
+            return []
+        
+    @staticmethod
+    def delete_file(file_id: str):
 
-                    created_at = datetime.fromtimestamp(
-                        os.path.getctime(file_path)
-                    ).strftime("%Y-%m-%d %H:%M")
+        file_path = os.path.join(UPLOAD_DIR, f"{file_id}.csv")
 
-                    files.append({
-                        "file_id": file_id,
-                        "filename": filename,   # currently UUID.csv
-                        "created_at": created_at
-                    })
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
-            return files
+        meta_path = os.path.join(UPLOAD_DIR, "meta.json")
+
+        if os.path.exists(meta_path):
+            with open(meta_path, "r") as f:
+                meta = json.load(f)
+
+            meta = [x for x in meta if x["file_id"] != file_id]
+
+            with open(meta_path, "w") as f:
+                json.dump(meta, f, indent=2)
+
+        return {"success": True}

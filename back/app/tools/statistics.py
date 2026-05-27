@@ -5,17 +5,13 @@ import numpy as np
 
 def compute_correlation(df: pd.DataFrame, col1: str, col2: str):
     try:
-        # беремо лише 2 колонки
         data = df[[col1, col2]].copy()
 
-        # convert to numeric
         data[col1] = pd.to_numeric(data[col1], errors="coerce")
         data[col2] = pd.to_numeric(data[col2], errors="coerce")
 
-        # remove NaN
         data = data.dropna()
 
-        # not enough data
         if len(data) < 2:
             return {
                 "error": "Not enough valid numeric data"
@@ -23,7 +19,6 @@ def compute_correlation(df: pd.DataFrame, col1: str, col2: str):
 
         corr, p_value = pearsonr(data[col1], data[col2])
 
-        # protection against NaN
         if np.isnan(corr) or np.isnan(p_value):
             return {
                 "error": "Correlation returned NaN"

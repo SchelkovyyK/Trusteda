@@ -1,6 +1,6 @@
 import numpy as np
 from app.tools.statistics import compute_correlation
-
+from app.services.llm_service import generate_llm_report
 
 
 def bootstrap_stability(df, col1, col2, n=50):
@@ -19,7 +19,6 @@ def bootstrap_stability(df, col1, col2, n=50):
     return float(1 - np.std(values))
 
 
-
 def compute_reliability(corr, p_value, stability):
     S = 1 - p_value
     V = 1 if abs(corr) > 0.5 else 0.5
@@ -27,7 +26,9 @@ def compute_reliability(corr, p_value, stability):
 
     return float(0.4 * S + 0.3 * V + 0.3 * B)
 
+
 def analyze(df, col1, col2):
+
     result = compute_correlation(df, col1, col2)
 
     if "error" in result:
@@ -39,10 +40,26 @@ def analyze(df, col1, col2):
     stability = bootstrap_stability(df, col1, col2)
     reliability = compute_reliability(corr, p_value, stability)
 
+    analysis_result = {
+        "dataset_name": "uploaded_dataset",
+        "columns": [col1, col2],
+        "sample_size": len(df),
+        "analysis_type": "correlation",
+        "metrics": {
+            "correlation": corr,
+            "p_value": p_value,
+            "stability": stability,
+            "reliability": reliability
+        }
+    }
+
+    llm_report = generate_llm_report(analysis_result)
+
     return {
         "insight": f"{col1} correlates with {col2}",
         "correlation": corr,
         "p_value": p_value,
         "stability": stability,
-        "reliability": reliability
+        "reliability": reliability,
+        "llm_report": llm_report
     }
