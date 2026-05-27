@@ -8,7 +8,6 @@ const analyzeBtn = document.getElementById("analyzeBtn");
 uploadBtn.addEventListener("click", uploadFile);
 analyzeBtn.addEventListener("click", runAnalysis);
 
-
 fileInput.addEventListener("change", () => {
   if (fileInput.files.length > 0) {
     fileName.textContent = fileInput.files[0].name;
@@ -45,9 +44,13 @@ async function uploadFile(e) {
     currentFileId = data.file_id;
     fillColumns(data.columns);
 
+    // Виклик відображення таблиці після успішного завантаження файлу
+    renderTable(data.columns, data.preview || []);
+
     analyzeBtn.disabled = false;
 
     btn.textContent = "Uploaded ✓";
+    await loadFiles();
   } catch (e) {
     btn.textContent = "Error";
   } finally {
@@ -133,15 +136,37 @@ async function loadFiles() {
 
     files.forEach((file) => {
       const div = document.createElement("div");
+
       div.classList.add("file-item");
 
       div.innerHTML = `
-        <div class="file-top">
-          <span>${file.filename}</span>
-          <span>${file.created_at}</span>
-        </div>
-        <div class="file-id">ID: ${file.file_id}</div>
-      `;
+    <div class="file-top">
+      <span>${file.filename}</span>
+      <span>${file.created_at}</span>
+    </div>
+
+    <div class="file-bottom">
+      <div class="file-id">
+        ID: ${file.file_id}
+      </div>
+
+      <button class="delete-btn">
+        Delete
+      </button>
+    </div>
+  `;
+
+      const deleteBtn = div.querySelector(".delete-btn");
+
+      deleteBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+
+        await fetch(`/files/${file.file_id}`, {
+          method: "DELETE",
+        });
+
+        await loadFiles();
+      });
 
       div.addEventListener("click", async () => {
         currentFileId = file.file_id;
@@ -153,15 +178,19 @@ async function loadFiles() {
         div.classList.add("active");
 
         const res = await fetch(`/file-info?file_id=${file.file_id}`);
+
         const data = await res.json();
 
         fillColumns(data.columns);
+
+        // Виклик відображення таблиці при кліку на файл з історії
+        renderTable(data.columns, data.preview || []);
+
         analyzeBtn.disabled = false;
       });
 
       container.appendChild(div);
     });
-
   } catch (err) {
     console.error("loadFiles error:", err);
   }
@@ -170,3 +199,47 @@ async function loadFiles() {
 window.addEventListener("DOMContentLoaded", () => {
   loadFiles();
 });
+
+
+function renderTable(columns, rows) {
+  const container = document.getElementById("tableContainer");
+  const thead = document.getElementById("table-head");
+  const tbody = document.getElementById("table-body");
+
+  // Очищення старої таблиці перед побудовою нової
+  thead.innerHTML = "";
+  tbody.innerHTML = "";
+
+  if (!columns || columns.length === 0) {
+    container.style.display = "none";
+    return;
+  }
+
+  // 1. Генерація заголовків стовпців (th)
+  const headerTr = document.createElement("tr");
+  columns.forEach(colName => {
+    const th = document.createElement("th");
+    th.textContent = colName;
+    headerTr.appendChild(th);
+  });
+  thead.appendChild(headerTr);
+
+  // 2. Генерація рядків з реальними даними (td)
+  if (rows && rows.length > 0) {
+    rows.forEach(rowData => {
+      const tr = document.createElement("tr");
+      
+      columns.forEach((colName, index) => {
+        const td = document.createElement("td");
+        // Перевіряємо, чи рядок прийшов як масив чи як об'єкт
+        const cellValue = Array.isArray(rowData) ? rowData[index] : rowData[colName];
+        td.textContent = cellValue !== null && cellValue !== undefined ? cellValue : "";
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  // Показуємо заповнену таблицю користувачу
+  container.style.display = "block";
+}

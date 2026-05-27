@@ -1,11 +1,9 @@
-/* === UPLOAD BLOCK === */
 .upload-block {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-/* FILE */
 .file-upload {
   display: flex;
   align-items: center;
@@ -36,60 +34,10 @@
   color: var(--text-secondary);
 }
 
-/* BUTTONS */
-.upload-block button {
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.upload-block button:first-of-type {
-  background: var(--primary);
-  color: white;
-}
-
-.upload-block button:last-of-type {
-  background: var(--accent);
-  color: white;
-}
-
-.upload-block button:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-/* SELECTS */
-.upload-block select {
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: var(--bg-main);
-  color: var(--text-main);
-}
-
-.upload-block select:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
-/* RESULT */
-#result {
-  padding: 10px;
-  border-radius: 8px;
-  background: var(--bg-main);
-  border: 1px solid #ccc;
-  font-size: 12px;
-  max-height: 200px;
-  overflow-y: auto;
-  font-family: monospace;
-}
 .drop-zone {
   border: 2px dashed var(--text-secondary);
   border-radius: 12px;
-  padding: 20px;
+  padding: 24px;
   text-align: center;
   cursor: pointer;
 
@@ -110,21 +58,93 @@
   background: rgba(76, 175, 80, 0.1);
 }
 
+.upload-block button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#uploadBtn {
+  background: var(--primary);
+  color: white;
+}
+
+#analyzeBtn {
+  background: var(--accent);
+  color: white;
+}
+
+#uploadBtn:hover,
+#analyzeBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.selectors {
+  display: flex;
+  gap: 10px;
+}
+
+.upload-block select {
+  flex: 1;
+
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+.upload-block select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+#result {
+  padding: 12px;
+  border-radius: 10px;
+
+  background: var(--bg-main);
+  border: 1px solid #ccc;
+
+  font-size: 12px;
+  font-family: monospace;
+
+  max-height: 220px;
+  overflow-y: auto;
+}
+
 .file-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+  /* margin-top: 20px; */
+  padding-right: 8px;
+  padding-bottom: 16px;
+  box-sizing: border-box; 
 }
 
 .file-item {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  background: var(--bg-main);
+
+  border: 1px solid #333;
+  border-radius: 14px;
+
+  padding: 16px;
+
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
 .file-item:hover {
+  transform: translateY(-2px);
   border-color: var(--primary);
 }
 
@@ -135,10 +155,151 @@
 .file-top {
   display: flex;
   justify-content: space-between;
-  font-weight: bold;
+  align-items: center;
+
+  margin-bottom: 12px;
+
+  font-weight: 600;
+}
+
+.file-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px; /* Ensures the ID text never crashes into the button */
 }
 
 .file-id {
   font-size: 12px;
-  color: gray;
+  color: var(--text-secondary);
+  word-break: break-all;
+  
+  /* Forces the long string to wrap inside its flexible container */
+  flex: 1; 
+  min-width: 0; 
+}
+
+.delete-btn {
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  
+  /* Prevents the text from getting squished or pushed out of view */
+  flex-shrink: 0; 
+  display: inline-block;
+}
+
+.delete-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+
+
+/* --- Dynamic CSV Data Table Styles --- */
+.table-container {
+  display: none; /* Hidden by default until data arrives */
+  width: 100%;
+  overflow-x: auto; /* Adds horizontal scrolling if columns spill out */
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: var(--bg-main);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-top: 10px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.data-table th {
+  background: var(--primary);
+  color: white;
+  padding: 12px 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ccc;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+/* Zebra striping for row readability */
+.data-table tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Row hover highlight animation */
+.data-table tbody tr:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transition: background 0.15s ease;
+}
+
+
+
+/* Custom scrollbar for the file list container */
+.file-list::-webkit-scrollbar {
+  width: 8px;               /* Width of the vertical scrollbar */
+  height: 8px;              /* Height of the horizontal scrollbar */
+}
+
+.file-list::-webkit-scrollbar-track {
+  background: #111424;      /* Matches your dark panel background */
+  border-radius: 10px;
+}
+
+.file-list::-webkit-scrollbar-thumb {
+  background: #3b4261;      /* Subtle slate gray for the draggable bar */
+  border-radius: 10px;
+  border: 2px solid #111424; /* Creates a clean padding effect */
+  transition: background 0.2s ease;
+}
+
+.file-list::-webkit-scrollbar-thumb:hover {
+  background: var(--primary); /* Pops with your primary brand color on hover */
+}
+
+/* Firefox Support */
+.file-list {
+  scrollbar-width: thin;
+  scrollbar-color: #3b4261 #111424;
+}
+
+/* Light Theme Scrollbar */
+.file-list::-webkit-scrollbar {
+  width: 6px; /* Slightly thinner for a cleaner look */
+}
+
+.file-list::-webkit-scrollbar-track {
+  background: transparent; /* Invisible track makes the layout feel less cluttered */
+}
+
+.file-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1; /* Soft slate gray */
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.file-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; /* Darker slate on hover */
+}
+
+/* Firefox Support */
+.file-list {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
 }

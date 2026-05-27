@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trust EDA</title>
-    <link rel="shortcut icon" href="/static/logos/Logo.svg" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="/static/logos/Logo.svg"
+      type="image/x-icon"
+    />
     <link rel="stylesheet" href="/static/styles/reset.css" />
     <link rel="stylesheet" href="/static/styles/index.css" />
     <link rel="stylesheet" href="/static/styles/upload.css" />
@@ -63,9 +67,7 @@
     </header>
 
     <main class="main">
-     
       <div class="upload-block">
-
         <div class="drop-zone" id="dropZone">
           <p>Drag the file here or click</p>
           <span id="file-name">No file selected</span>
@@ -86,6 +88,21 @@
       </div>
       <div id="fileList" class="file-list"></div>
     </main>
+    <!-- Insert this directly below <pre id="result"></pre> -->
+    <div
+      class="table-container"
+      id="tableContainer"
+      style="display: none; margin-top: 20px; width: 100%; overflow-x: auto"
+    >
+      <table
+        class="data-table"
+        id="dataTable"
+        style="width: 100%; border-collapse: collapse; text-align: left"
+      >
+        <thead id="table-head"></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
 
     <script src="/static/scripts/index.js"></script>
     <script src="/static/scripts/upload.js"></script>

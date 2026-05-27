@@ -203,18 +203,29 @@ input[type="range"]:active::-webkit-slider-thumb {
 
 .main {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-wrap: wrap; /* Дозволяє перенос на новий рядок */
   gap: 40px;
   padding: 40px 20px;
+  justify-content: center; /* Центрує блоки, коли вони один під одним */
+  align-items: flex-start; /* Щоб блоки не розтягувалися по висоті один одного */
 }
 
-
-.main > div {
+/* Вибираємо безпосередньо upload-block та file-list */
+.upload-block,
+.file-list {
   background: var(--bg-card);
   padding: 25px;
   border-radius: 16px;
-  width: 420px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   transition: 0.3s;
+
+  /* Гнучкість: */
+  flex: 1 1 400px; /* Базовий розмір 400px, можуть рости */
+  max-width: 600px; /* Обмежуємо максимальну ширину для естетики */
+  width: 100%; /* Важливо для мобільних пристроїв */
+}
+
+/* Специфічне налаштування для списку файлів, якщо він порожній */
+.file-list {
+  min-height: 100px;
 }
