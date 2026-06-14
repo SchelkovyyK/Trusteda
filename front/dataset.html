@@ -3,16 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trust EDA</title>
+    <title>Dataset History | Trust EDA</title>
+
     <link
       rel="shortcut icon"
       href="/static/logos/Logo.svg"
       type="image/x-icon"
     />
+
     <link rel="stylesheet" href="/static/styles/reset.css" />
     <link rel="stylesheet" href="/static/styles/index.css" />
-    <link rel="stylesheet" href="/static/styles/upload.css" />
+    <link rel="stylesheet" href="/static/styles/dataset.css" />
   </head>
+
   <body>
     <header class="header">
       <a class="header__logo" href="/">
@@ -66,44 +69,46 @@
       </nav>
     </header>
 
-    <main class="main">
-      <div class="upload-block">
-        <div class="drop-zone" id="dropZone">
-          <p>Drag the file here or click</p>
-          <span id="file-name">No file selected</span>
+    <main class="dataset-main">
+      <button class="back-btn" onclick="window.location.href='/'">
+        ← Back
+      </button>
+      <section class="dataset-card">
+        <h2 id="fileName">Loading dataset...</h2>
+
+        <div id="datasetInfo" class="dataset-meta">Loading dataset info...</div>
+      </section>
+
+      <section class="dataset-card">
+        <h3>Dataset Preview</h3>
+
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead id="previewHead"></thead>
+
+            <tbody id="previewBody"></tbody>
+          </table>
         </div>
+      </section>
 
-        <input type="file" id="fileInput" hidden />
+      <section class="dataset-card">
+        <h3>Analysis History</h3>
 
-        <button id="uploadBtn" type="button">Upload</button>
+        <div id="history">Loading...</div>
+      </section>
 
-        <select id="col1"></select>
-        <select id="col2"></select>
+      <section class="dataset-card">
+        <h3>Selected Report</h3>
 
-        <button id="suggestBtn">Suggest Analysis</button>
+        <pre id="report">
+Select a report to view details.
+        </pre>
+      </section>
 
-        <button id="analyzeBtn" type="button">Analyze</button>
-
-        <pre id="result"></pre>
-      </div>
-      <div id="fileList" class="file-list"></div>
+      
     </main>
-    <div
-      class="table-container"
-      id="tableContainer"
-      style="display: none; margin-top: 20px; width: 100%; overflow-x: auto"
-    >
-      <table
-        class="data-table"
-        id="dataTable"
-        style="width: 100%; border-collapse: collapse; text-align: left"
-      >
-        <thead id="table-head"></thead>
-        <tbody id="table-body"></tbody>
-      </table>
-    </div>
 
     <script src="/static/scripts/index.js"></script>
-    <script src="/static/scripts/upload.js"></script>
+    <script src="/static/scripts/dataset.js"></script>
   </body>
 </html>

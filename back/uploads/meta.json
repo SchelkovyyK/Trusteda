@@ -1,27 +1,98 @@
 [
   {
-    "file_id": "3648a319-7a06-4002-99f3-aec4e48720a8",
+    "file_id": "5a38d90d-f3dc-4539-8dd7-16b8e433cacc",
     "filename": "titanic.csv",
-    "created_at": "2026-04-29 23:39"
-  },
-  {
-    "file_id": "9640cfac-63d4-444e-a2f0-e40a968efa51",
-    "filename": "titanic.csv",
-    "created_at": "2026-04-29 23:43"
-  },
-  {
-    "file_id": "3c999ba7-8d13-4384-bb16-7beeef379935",
-    "filename": "titanic.csv",
-    "created_at": "2026-05-07 07:54"
-  },
-  {
-    "file_id": "b09faa58-65a6-4d7b-821e-445ae917c84b",
-    "filename": "titanic.csv",
-    "created_at": "2026-05-07 10:10"
-  },
-  {
-    "file_id": "0320f7bc-f033-4403-85b3-a38ea9674f9e",
-    "filename": "access-code-password-recovery-code.csv",
-    "created_at": "2026-05-20 22:25"
+    "created_at": "2026-06-10 18:41",
+    "stats": {
+      "rows": 891,
+      "columns": 12
+    },
+    "columns": [
+      "PassengerId",
+      "Survived",
+      "Pclass",
+      "Name",
+      "Sex",
+      "Age",
+      "SibSp",
+      "Parch",
+      "Ticket",
+      "Fare",
+      "Cabin",
+      "Embarked"
+    ],
+    "preview": [
+      {
+        "PassengerId": 1,
+        "Survived": 0,
+        "Pclass": 3,
+        "Name": "Braund, Mr. Owen Harris",
+        "Sex": "male",
+        "Age": 22.0,
+        "SibSp": 1,
+        "Parch": 0,
+        "Ticket": "A/5 21171",
+        "Fare": 7.25,
+        "Cabin": "",
+        "Embarked": "S"
+      },
+      {
+        "PassengerId": 2,
+        "Survived": 1,
+        "Pclass": 1,
+        "Name": "Cumings, Mrs. John Bradley (Florence Briggs Thayer)",
+        "Sex": "female",
+        "Age": 38.0,
+        "SibSp": 1,
+        "Parch": 0,
+        "Ticket": "PC 17599",
+        "Fare": 71.2833,
+        "Cabin": "C85",
+        "Embarked": "C"
+      },
+      {
+        "PassengerId": 3,
+        "Survived": 1,
+        "Pclass": 3,
+        "Name": "Heikkinen, Miss. Laina",
+        "Sex": "female",
+        "Age": 26.0,
+        "SibSp": 0,
+        "Parch": 0,
+        "Ticket": "STON/O2. 3101282",
+        "Fare": 7.925,
+        "Cabin": "",
+        "Embarked": "S"
+      },
+      {
+        "PassengerId": 4,
+        "Survived": 1,
+        "Pclass": 1,
+        "Name": "Futrelle, Mrs. Jacques Heath (Lily May Peel)",
+        "Sex": "female",
+        "Age": 35.0,
+        "SibSp": 1,
+        "Parch": 0,
+        "Ticket": "113803",
+        "Fare": 53.1,
+        "Cabin": "C123",
+        "Embarked": "S"
+      },
+      {
+        "PassengerId": 5,
+        "Survived": 0,
+        "Pclass": 3,
+        "Name": "Allen, Mr. William Henry",
+        "Sex": "male",
+        "Age": 35.0,
+        "SibSp": 0,
+        "Parch": 0,
+        "Ticket": "373450",
+        "Fare": 8.05,
+        "Cabin": "",
+        "Embarked": "S"
+      }
+    ],
+    "report_ids": []
   }
 ]

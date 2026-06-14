@@ -16,7 +16,7 @@ def file_info(file_id: str):
     return {
         "columns": df.columns.tolist(),
         "rows": len(df),
-        "preview": df.head(5).to_dict(orient="records")  # Додано віддачу 5 рядків даних
+        "preview": df.head(5).to_dict(orient="records")  
     }
 
 @router.delete("/files/{file_id}")

@@ -5,9 +5,8 @@ const slider = document.getElementById("step-slider");
 const labels = document.querySelectorAll(".slider-labels span");
 const sliderTrack = document.querySelector(".theme-switch .slider");
 
-
 const sunColor = "#facc15";
-const moonColor = "#3b82f6"; 
+const moonColor = "#3b82f6";
 const sliderSun = "#facc15";
 const sliderMoon = "#003dca";
 
@@ -29,29 +28,37 @@ function updateThemeUI() {
   document.documentElement.setAttribute("data-theme", theme);
   localStorage.setItem("theme", theme);
 
-  sliderTrack.style.backgroundColor = isDark ? sliderMoon : sliderSun;
+  if (sliderTrack) {
+    sliderTrack.style.backgroundColor = isDark ? sliderMoon : sliderSun;
+  }
 
   const sunActive = "#facc15";
   const sunInactive = "#718096";
   const moonActive = "#3b82f6";
   const moonInactive = "#94a3b8";
 
-  const sunPaths = iconSun.querySelectorAll("path");
-  sunPaths.forEach((path) => {
-    path.setAttribute("stroke", isDark ? sunInactive : sunActive);
-  });
+  if (iconSun) {
+    const sunPaths = iconSun.querySelectorAll("path");
 
+    sunPaths.forEach((path) => {
+      path.setAttribute("stroke", isDark ? sunInactive : sunActive);
+    });
+  }
 
-  const moonPaths = iconMoon.querySelectorAll("path");
-  moonPaths.forEach((path) => {
-    path.setAttribute("fill", isDark ? moonActive : moonInactive);
-  });
+  if (iconMoon) {
+    const moonPaths = iconMoon.querySelectorAll("path");
 
-  highlightLevel(slider.value, isDark ? moonColor : sunColor);
+    moonPaths.forEach((path) => {
+      path.setAttribute("fill", isDark ? moonActive : moonInactive);
+    });
+  }
+
+  if (slider) {
+    highlightLevel(slider.value, isDark ? moonColor : sunColor);
+  }
 }
 
 function highlightLevel(value, color) {
-  // Find nearest step
   let nearestStep = stepValues.reduce((prev, curr) =>
     Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
   );
@@ -69,22 +76,36 @@ function highlightLevel(value, color) {
   });
 }
 
-checkbox.addEventListener("change", updateThemeUI);
+if (checkbox) {
+  checkbox.addEventListener("change", updateThemeUI);
+}
 
+if (slider) {
+  slider.addEventListener("input", () => {
+    const color = checkbox.checked ? moonColor : sunColor;
+    highlightLevel(slider.value, color);
+  });
 
-slider.addEventListener("input", () => {
-  const color = checkbox.checked ? moonColor : sunColor;
-  highlightLevel(slider.value, color);
-});
+  slider.addEventListener("change", () => {
+    let nearestStep = stepValues.reduce((prev, curr) =>
+      Math.abs(curr - slider.value) < Math.abs(prev - slider.value)
+        ? curr
+        : prev
+    );
 
-slider.addEventListener("change", () => {
-  let nearestStep = stepValues.reduce((prev, curr) =>
-    Math.abs(curr - slider.value) < Math.abs(prev - slider.value) ? curr : prev
-  );
-  slider.value = nearestStep;
-  const color = checkbox.checked ? moonColor : sunColor;
-  highlightLevel(slider.value, color);
-});
+    slider.value = nearestStep;
+
+    const color = checkbox.checked ? moonColor : sunColor;
+
+    highlightLevel(slider.value, color);
+  });
+}
+
+updateThemeUI();
+
+if (slider) {
+  highlightLevel(slider.value, checkbox.checked ? moonColor : sunColor);
+}
 
 updateThemeUI();
 highlightLevel(slider.value, checkbox.checked ? moonColor : sunColor);

@@ -1,19 +1,24 @@
 console.log("upload.js loaded");
+
 let currentFileId = null;
+
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("fileInput");
 const fileName = document.getElementById("file-name");
 const analyzeBtn = document.getElementById("analyzeBtn");
 
+const dropZone = document.getElementById("dropZone");
+
 uploadBtn.addEventListener("click", uploadFile);
 analyzeBtn.addEventListener("click", runAnalysis);
 
+// Safe DOM binding
+if (dropZone) {
+  dropZone.addEventListener("click", () => fileInput.click());
+}
+
 fileInput.addEventListener("change", () => {
-  if (fileInput.files.length > 0) {
-    fileName.textContent = fileInput.files[0].name;
-  } else {
-    fileName.textContent = "Файл не вибрано";
-  }
+  fileName.textContent = fileInput.files?.[0]?.name || "No file selected";
 });
 
 async function uploadFile(e) {
@@ -22,13 +27,11 @@ async function uploadFile(e) {
   const file = fileInput.files[0];
 
   if (!file) {
-    alert("Оберіть файл");
-    return;
+    return alert("Select file");
   }
 
-  const btn = uploadBtn;
-  btn.textContent = "Uploading...";
-  btn.disabled = true;
+  uploadBtn.disabled = true;
+  uploadBtn.textContent = "Uploading...";
 
   const formData = new FormData();
   formData.append("file", file);
@@ -39,25 +42,29 @@ async function uploadFile(e) {
       body: formData,
     });
 
+    if (!res.ok) {
+      throw new Error("Upload failed");
+    }
+
     const data = await res.json();
 
     currentFileId = data.file_id;
-    fillColumns(data.columns);
 
-    // Виклик відображення таблиці після успішного завантаження файлу
-    renderTable(data.columns, data.preview || []);
+    fillColumns(data.columns || []);
+    renderTable(data.preview || [], data.columns || []);
 
     analyzeBtn.disabled = false;
 
-    btn.textContent = "Uploaded ✓";
     await loadFiles();
-  } catch (e) {
-    btn.textContent = "Error";
+  } catch (err) {
+    console.error(err);
+
+    uploadBtn.textContent = "Error";
   } finally {
     setTimeout(() => {
-      btn.textContent = "Upload";
-      btn.disabled = false;
-    }, 1500);
+      uploadBtn.textContent = "Upload";
+      uploadBtn.disabled = false;
+    }, 1000);
   }
 }
 
@@ -68,178 +75,197 @@ function fillColumns(columns) {
   col1.innerHTML = "";
   col2.innerHTML = "";
 
-  columns.forEach((col) => {
-    col1.add(new Option(col, col));
-    col2.add(new Option(col, col));
+  columns.forEach((column) => {
+    col1.add(new Option(column, column));
+    col2.add(new Option(column, column));
   });
 }
 
 async function runAnalysis() {
+  if (!currentFileId) {
+    return alert("Select dataset first");
+  }
+
   const col1 = document.getElementById("col1").value;
   const col2 = document.getElementById("col2").value;
 
-  const res = await fetch(
-    `/analyze?file_id=${currentFileId}&col1=${col1}&col2=${col2}`,
-    {
-      method: "POST",
-    }
-  );
-
-  const data = await res.json();
-
-  document.getElementById("result").textContent = JSON.stringify(data, null, 2);
-}
-
-const dropZone = document.getElementById("dropZone");
-
-dropZone.addEventListener("click", () => {
-  fileInput.click();
-});
-
-function updateFileName(file) {
-  fileName.textContent = file ? file.name : "Файл не вибрано";
-}
-
-dropZone.addEventListener("dragover", (e) => {
-  e.preventDefault();
-  dropZone.classList.add("active");
-});
-
-dropZone.addEventListener("dragleave", () => {
-  dropZone.classList.remove("active");
-});
-
-dropZone.addEventListener("drop", (e) => {
-  e.preventDefault();
-  dropZone.classList.remove("active");
-
-  const file = e.dataTransfer.files[0];
-  fileInput.files = e.dataTransfer.files;
-
-  updateFileName(file);
-});
-
-async function loadFiles() {
   try {
-    const res = await fetch("/files");
+    const res = await fetch(
+      `/analyze?file_id=${currentFileId}&col1=${encodeURIComponent(
+        col1
+      )}&col2=${encodeURIComponent(col2)}`,
+      {
+        method: "POST",
+      }
+    );
 
-    if (!res.ok) {
-      console.error("Failed to load files:", res.status);
-      return;
-    }
+    const data = await res.json();
 
-    const files = await res.json();
-    console.log("FILES FROM BACKEND:", files);
-
-    const container = document.getElementById("fileList");
-    container.innerHTML = "";
-
-    files.forEach((file) => {
-      const div = document.createElement("div");
-
-      div.classList.add("file-item");
-
-      div.innerHTML = `
-    <div class="file-top">
-      <span>${file.filename}</span>
-      <span>${file.created_at}</span>
-    </div>
-
-    <div class="file-bottom">
-      <div class="file-id">
-        ID: ${file.file_id}
-      </div>
-
-      <button class="delete-btn">
-        Delete
-      </button>
-    </div>
-  `;
-
-      const deleteBtn = div.querySelector(".delete-btn");
-
-      deleteBtn.addEventListener("click", async (e) => {
-        e.stopPropagation();
-
-        await fetch(`/files/${file.file_id}`, {
-          method: "DELETE",
-        });
-
-        await loadFiles();
-      });
-
-      div.addEventListener("click", async () => {
-        currentFileId = file.file_id;
-
-        document
-          .querySelectorAll(".file-item")
-          .forEach((el) => el.classList.remove("active"));
-
-        div.classList.add("active");
-
-        const res = await fetch(`/file-info?file_id=${file.file_id}`);
-
-        const data = await res.json();
-
-        fillColumns(data.columns);
-
-        // Виклик відображення таблиці при кліку на файл з історії
-        renderTable(data.columns, data.preview || []);
-
-        analyzeBtn.disabled = false;
-      });
-
-      container.appendChild(div);
-    });
+    renderInsight(data);
   } catch (err) {
-    console.error("loadFiles error:", err);
+    console.error(err);
+
+    renderInsight({
+      error: "Analysis failed",
+    });
   }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  loadFiles();
-});
+async function loadFiles() {
+  const res = await fetch("/files");
 
+  const files = await res.json();
 
-function renderTable(columns, rows) {
+  const container = document.getElementById("fileList");
+
+  container.innerHTML = "";
+
+  files.forEach((file) => {
+    const div = document.createElement("div");
+
+    div.className = "file-item";
+
+    div.innerHTML = `
+      <div class="file-top">
+        <span>📁 ${file.filename}</span>
+        <span>${file.created_at}</span>
+      </div>
+
+      <div class="file-meta">
+        ${file.stats?.rows ?? "?"} rows •
+        ${file.stats?.columns ?? "?"} cols
+      </div>
+
+      <div class="file-actions">
+        <button class="open-btn">Open</button>
+        <button class="history-btn">History</button>
+        <button class="delete-btn">Delete</button>
+      </div>
+    `;
+
+    const openBtn = div.querySelector(".open-btn");
+    const historyBtn = div.querySelector(".history-btn");
+    const deleteBtn = div.querySelector(".delete-btn");
+
+    deleteBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+
+      await fetch(`/files/${file.file_id}`, {
+        method: "DELETE",
+      });
+
+      loadFiles();
+    });
+
+    openBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+
+      await openFile(file.file_id);
+    });
+
+    historyBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      window.location.href = `/static/dataset.html?file_id=${file.file_id}`;
+    });
+
+    container.appendChild(div);
+  });
+}
+
+async function openFile(fileId) {
+  currentFileId = fileId;
+
+  const res = await fetch(`/file-info?file_id=${fileId}`);
+
+  const data = await res.json();
+
+  renderTable(data.preview || [], data.columns || []);
+
+  fillColumns(data.columns || []);
+
+  analyzeBtn.disabled = false;
+}
+
+window.addEventListener("DOMContentLoaded", loadFiles);
+
+function renderTable(rows, columns) {
   const container = document.getElementById("tableContainer");
+
   const thead = document.getElementById("table-head");
+
   const tbody = document.getElementById("table-body");
 
-  // Очищення старої таблиці перед побудовою нової
   thead.innerHTML = "";
   tbody.innerHTML = "";
 
-  if (!columns || columns.length === 0) {
+  if (!rows?.length) {
     container.style.display = "none";
     return;
   }
 
-  // 1. Генерація заголовків стовпців (th)
-  const headerTr = document.createElement("tr");
-  columns.forEach(colName => {
-    const th = document.createElement("th");
-    th.textContent = colName;
-    headerTr.appendChild(th);
-  });
-  thead.appendChild(headerTr);
+  const headerRow = document.createElement("tr");
 
-  // 2. Генерація рядків з реальними даними (td)
-  if (rows && rows.length > 0) {
-    rows.forEach(rowData => {
-      const tr = document.createElement("tr");
-      
-      columns.forEach((colName, index) => {
-        const td = document.createElement("td");
-        // Перевіряємо, чи рядок прийшов як масив чи як об'єкт
-        const cellValue = Array.isArray(rowData) ? rowData[index] : rowData[colName];
-        td.textContent = cellValue !== null && cellValue !== undefined ? cellValue : "";
-        tr.appendChild(td);
-      });
-      tbody.appendChild(tr);
+  columns.forEach((column) => {
+    const th = document.createElement("th");
+
+    th.textContent = column;
+
+    headerRow.appendChild(th);
+  });
+
+  thead.appendChild(headerRow);
+
+  rows.forEach((row) => {
+    const tr = document.createElement("tr");
+
+    columns.forEach((column) => {
+      const td = document.createElement("td");
+
+      td.textContent = row[column] ?? "";
+
+      tr.appendChild(td);
     });
+
+    tbody.appendChild(tr);
+  });
+
+  container.style.display = "block";
+}
+
+function renderInsight(data) {
+  const result = document.getElementById("result");
+
+  if (!result) {
+    return;
   }
 
-  // Показуємо заповнену таблицю користувачу
-  container.style.display = "block";
+  if (data.error) {
+    result.textContent = `❌ ${data.error}`;
+
+    return;
+  }
+
+  result.textContent = `
+Insight:
+${data.insight}
+
+Correlation:
+${data.correlation}
+
+P-value:
+${data.p_value}
+
+Bootstrap Stability:
+${data.stability}
+
+Reliability:
+${data.reliability}
+
+Report ID:
+${data.report_id ?? "N/A"}
+
+LLM Report:
+${data.llm_report ?? "Not generated"}
+`;
 }
