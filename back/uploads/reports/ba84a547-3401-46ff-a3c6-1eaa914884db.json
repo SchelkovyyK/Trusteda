@@ -1,0 +1,16 @@
+{
+  "report_id": "ba84a547-3401-46ff-a3c6-1eaa914884db",
+  "file_id": "5a38d90d-f3dc-4539-8dd7-16b8e433cacc",
+  "created_at": "2026-06-14 18:45",
+  "insight": "PassengerId analyzed with Survived",
+  "analysis_type": "pearson",
+  "metrics": {
+    "analysis_type": "pearson",
+    "primary_metric": -0.005006660767066501,
+    "correlation": -0.005006660767066501,
+    "p_value": 0.8813657768798053
+  },
+  "stability": 0.97154341133237,
+  "reliability": 0.48891671264778885,
+  "llm_report": "The Pearson correlation analysis between PassengerId and Survived indicates a very weak negative relationship (r = -0.005). The p-value (0.881) suggests that this relationship is not statistically significant. Practically, this means that PassengerId has little to no influence on Survived. The correlation is negligible, and no meaningful conclusions can be drawn from this relationship."
+}

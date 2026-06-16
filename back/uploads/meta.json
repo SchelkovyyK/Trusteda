@@ -93,6 +93,151 @@
         "Embarked": "S"
       }
     ],
-    "report_ids": []
+    "report_ids": [
+      "ba84a547-3401-46ff-a3c6-1eaa914884db",
+      "ed09fdc5-b173-4a5e-9a09-a6d400a8a35b"
+    ],
+    "suggestions": [
+      {
+        "col1": "Sex",
+        "col2": "Survived",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Sex' has 2 categories that can be compared against 'Survived'."
+      },
+      {
+        "col1": "Sex",
+        "col2": "Pclass",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Sex' has 2 categories that can be compared against 'Pclass'."
+      },
+      {
+        "col1": "Sex",
+        "col2": "Age",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Sex' has 2 categories that can be compared against 'Age'."
+      },
+      {
+        "col1": "Sex",
+        "col2": "SibSp",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Sex' has 2 categories that can be compared against 'SibSp'."
+      },
+      {
+        "col1": "Sex",
+        "col2": "Parch",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Sex' has 2 categories that can be compared against 'Parch'."
+      },
+      {
+        "col1": "Sex",
+        "col2": "Fare",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Sex' has 2 categories that can be compared against 'Fare'."
+      },
+      {
+        "col1": "Embarked",
+        "col2": "Survived",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Embarked' has 3 categories that can be compared against 'Survived'."
+      },
+      {
+        "col1": "Embarked",
+        "col2": "Pclass",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Embarked' has 3 categories that can be compared against 'Pclass'."
+      },
+      {
+        "col1": "Embarked",
+        "col2": "Age",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Embarked' has 3 categories that can be compared against 'Age'."
+      },
+      {
+        "col1": "Embarked",
+        "col2": "SibSp",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Embarked' has 3 categories that can be compared against 'SibSp'."
+      },
+      {
+        "col1": "Embarked",
+        "col2": "Parch",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Embarked' has 3 categories that can be compared against 'Parch'."
+      },
+      {
+        "col1": "Embarked",
+        "col2": "Fare",
+        "type": "comparison",
+        "priority": 5,
+        "reason": "'Embarked' has 3 categories that can be compared against 'Fare'."
+      },
+      {
+        "col1": "Survived",
+        "col2": "Pclass",
+        "type": "correlation",
+        "priority": 3,
+        "reason": "Both columns are numeric."
+      },
+      {
+        "col1": "Survived",
+        "col2": "Age",
+        "type": "correlation",
+        "priority": 3,
+        "reason": "Both columns are numeric."
+      },
+      {
+        "col1": "Survived",
+        "col2": "SibSp",
+        "type": "correlation",
+        "priority": 3,
+        "reason": "Both columns are numeric."
+      },
+      {
+        "col1": "Survived",
+        "col2": "Parch",
+        "type": "correlation",
+        "priority": 3,
+        "reason": "Both columns are numeric."
+      },
+      {
+        "col1": "Survived",
+        "col2": "Fare",
+        "type": "correlation",
+        "priority": 3,
+        "reason": "Both columns are numeric."
+      },
+      {
+        "col1": "Pclass",
+        "col2": "Age",
+        "type": "correlation",
+        "priority": 3,
+        "reason": "Both columns are numeric."
+      },
+      {
+        "col1": "Pclass",
+        "col2": "SibSp",
+        "type": "correlation",
+        "priority": 3,
+        "reason": "Both columns are numeric."
+      },
+      {
+        "col1": "Pclass",
+        "col2": "Parch",
+        "type": "correlation",
+        "priority": 3,
+        "reason": "Both columns are numeric."
+      }
+    ]
   }
 ]

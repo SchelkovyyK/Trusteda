@@ -69,23 +69,61 @@
     <main class="main">
       <div class="upload-block">
         <div class="drop-zone" id="dropZone">
-          <p>Drag the file here or click</p>
+          <p>Drag file here or click</p>
           <span id="file-name">No file selected</span>
         </div>
 
         <input type="file" id="fileInput" hidden />
 
-        <button id="uploadBtn" type="button">Upload</button>
+        <button id="uploadBtn">Upload</button>
 
-        <select id="col1"></select>
-        <select id="col2"></select>
+        <div class="selectors">
+          <select id="col1"></select>
+          <select id="col2"></select>
+        </div>
 
         <button id="suggestBtn">Suggest Analysis</button>
 
-        <button id="analyzeBtn" type="button">Analyze</button>
+        <section class="suggestions-section">
+          <h3>Suggested Analyses</h3>
+
+          <div class="suggestions-toolbar">
+            <input
+              type="text"
+              id="suggestionSearch"
+              placeholder="Search suggestions..."
+            />
+
+            <select id="priorityFilter">
+              <option value="">All priorities</option>
+              <option value="5">High</option>
+              <option value="4">Medium</option>
+              <option value="3">Low</option>
+            </select>
+          </div>
+
+          <div style="overflow-x: auto">
+            <table class="suggestions-table">
+              <thead>
+                <tr>
+                  <th>Priority</th>
+                  <th>Columns</th>
+                  <th>Type</th>
+                  <th>Reason</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody id="suggestionsContainer"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <button id="analyzeBtn">Analyze</button>
 
         <pre id="result"></pre>
       </div>
+
       <div id="fileList" class="file-list"></div>
     </main>
     <div
@@ -104,6 +142,6 @@
     </div>
 
     <script src="/static/scripts/index.js"></script>
-    <script src="/static/scripts/upload.js"></script>
+    <script type="module" src="/static/scripts/upload.js"></script>
   </body>
 </html>

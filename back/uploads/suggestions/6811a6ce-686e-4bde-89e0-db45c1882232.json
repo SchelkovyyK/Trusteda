@@ -1,0 +1,148 @@
+{
+  "suggestion_id": "6811a6ce-686e-4bde-89e0-db45c1882232",
+  "file_id": "5a38d90d-f3dc-4539-8dd7-16b8e433cacc",
+  "created_at": "2026-06-16 18:32",
+  "count": 20,
+  "suggestions": [
+    {
+      "col1": "Sex",
+      "col2": "Survived",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Sex' has 2 categories that can be compared against 'Survived'."
+    },
+    {
+      "col1": "Sex",
+      "col2": "Pclass",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Sex' has 2 categories that can be compared against 'Pclass'."
+    },
+    {
+      "col1": "Sex",
+      "col2": "Age",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Sex' has 2 categories that can be compared against 'Age'."
+    },
+    {
+      "col1": "Sex",
+      "col2": "SibSp",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Sex' has 2 categories that can be compared against 'SibSp'."
+    },
+    {
+      "col1": "Sex",
+      "col2": "Parch",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Sex' has 2 categories that can be compared against 'Parch'."
+    },
+    {
+      "col1": "Sex",
+      "col2": "Fare",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Sex' has 2 categories that can be compared against 'Fare'."
+    },
+    {
+      "col1": "Embarked",
+      "col2": "Survived",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Embarked' has 3 categories that can be compared against 'Survived'."
+    },
+    {
+      "col1": "Embarked",
+      "col2": "Pclass",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Embarked' has 3 categories that can be compared against 'Pclass'."
+    },
+    {
+      "col1": "Embarked",
+      "col2": "Age",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Embarked' has 3 categories that can be compared against 'Age'."
+    },
+    {
+      "col1": "Embarked",
+      "col2": "SibSp",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Embarked' has 3 categories that can be compared against 'SibSp'."
+    },
+    {
+      "col1": "Embarked",
+      "col2": "Parch",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Embarked' has 3 categories that can be compared against 'Parch'."
+    },
+    {
+      "col1": "Embarked",
+      "col2": "Fare",
+      "type": "comparison",
+      "priority": 5,
+      "reason": "'Embarked' has 3 categories that can be compared against 'Fare'."
+    },
+    {
+      "col1": "Survived",
+      "col2": "Pclass",
+      "type": "correlation",
+      "priority": 3,
+      "reason": "Both columns are numeric."
+    },
+    {
+      "col1": "Survived",
+      "col2": "Age",
+      "type": "correlation",
+      "priority": 3,
+      "reason": "Both columns are numeric."
+    },
+    {
+      "col1": "Survived",
+      "col2": "SibSp",
+      "type": "correlation",
+      "priority": 3,
+      "reason": "Both columns are numeric."
+    },
+    {
+      "col1": "Survived",
+      "col2": "Parch",
+      "type": "correlation",
+      "priority": 3,
+      "reason": "Both columns are numeric."
+    },
+    {
+      "col1": "Survived",
+      "col2": "Fare",
+      "type": "correlation",
+      "priority": 3,
+      "reason": "Both columns are numeric."
+    },
+    {
+      "col1": "Pclass",
+      "col2": "Age",
+      "type": "correlation",
+      "priority": 3,
+      "reason": "Both columns are numeric."
+    },
+    {
+      "col1": "Pclass",
+      "col2": "SibSp",
+      "type": "correlation",
+      "priority": 3,
+      "reason": "Both columns are numeric."
+    },
+    {
+      "col1": "Pclass",
+      "col2": "Parch",
+      "type": "correlation",
+      "priority": 3,
+      "reason": "Both columns are numeric."
+    }
+  ]
+}

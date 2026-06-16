@@ -1,74 +1,144 @@
 import numpy as np
 
-from app.tools.statistics import compute_correlation
+from app.tools.statistics import analyze_relationship
 from app.services.llm_service import generate_llm_report
 from app.services.report_service import ReportService
 from app.services.file_service import FileService
-from app.services.suggestion_service import SuggestionService
+
 
 def bootstrap_stability(df, col1, col2, n=50):
+
     values = []
 
     for _ in range(n):
-        sample = df.sample(frac=1, replace=True)
 
-        res = compute_correlation(sample, col1, col2)
+        sample = df.sample(
+            frac=1,
+            replace=True
+        )
 
-        if "correlation" in res:
-            values.append(res["correlation"])
+        result = analyze_relationship(
+            sample,
+            col1,
+            col2
+        )
+
+        if "primary_metric" in result:
+            values.append(
+                result["primary_metric"]
+            )
 
     if not values:
         return 0.0
 
-    return float(1 - np.std(values))
+    stability = 1 - np.std(values)
+
+    return float(
+        max(
+            0.0,
+            min(1.0, stability)
+        )
+    )
 
 
-def compute_reliability(corr, p_value, stability):
-    S = 1 - p_value
-    V = 1 if abs(corr) > 0.5 else 0.5
-    B = stability
+def compute_reliability(
+    metric,
+    p_value,
+    stability
+):
 
-    return float(0.4 * S + 0.3 * V + 0.3 * B)
+    significance_score = max(
+        0.0,
+        min(1.0, 1 - p_value)
+    )
+
+    effect_score = (
+        1.0
+        if abs(metric) >= 0.5
+        else 0.5
+    )
+
+    reliability = (
+        0.4 * significance_score +
+        0.3 * effect_score +
+        0.3 * stability
+    )
+
+    return float(
+        max(
+            0.0,
+            min(1.0, reliability)
+        )
+    )
 
 
-def analyze(file_id, df, col1, col2):
+def analyze(
+    file_id,
+    df,
+    col1,
+    col2
+):
 
-    result = compute_correlation(df, col1, col2)
+    result = analyze_relationship(
+        df,
+        col1,
+        col2
+    )
 
     if "error" in result:
         return result
 
-    corr = result["correlation"]
+    metric = result["primary_metric"]
+
     p_value = result["p_value"]
 
-    stability = bootstrap_stability(df, col1, col2)
-    reliability = compute_reliability(corr, p_value, stability)
+    stability = bootstrap_stability(
+        df,
+        col1,
+        col2
+    )
+
+    reliability = compute_reliability(
+        metric,
+        p_value,
+        stability
+    )
 
     analysis_result = {
         "columns": [col1, col2],
         "sample_size": len(df),
+        "analysis_type": result["analysis_type"],
         "metrics": {
-            "correlation": corr,
-            "p_value": p_value,
+            **result,
             "stability": stability,
             "reliability": reliability
         }
     }
 
-    llm_report = generate_llm_report(analysis_result)
+    llm_report = generate_llm_report(
+        analysis_result
+    )
 
     report_data = {
-        "insight": f"{col1} correlates with {col2}",
-        "correlation": corr,
-        "p_value": p_value,
+        "insight": (
+            f"{col1} analyzed with {col2}"
+        ),
+        "analysis_type": result["analysis_type"],
+        "metrics": result,
         "stability": stability,
         "reliability": reliability,
         "llm_report": llm_report
     }
 
-    report_id = ReportService.save_report(file_id, report_data)
+    report_id = ReportService.save_report(
+        file_id,
+        report_data
+    )
 
-    FileService.add_report_to_file(file_id, report_id)
+    FileService.add_report_to_file(
+        file_id,
+        report_id
+    )
 
     return {
         "report_id": report_id,

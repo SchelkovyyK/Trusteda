@@ -135,3 +135,19 @@ class FileService:
 
         with open(META_PATH, "w", encoding="utf-8") as f:
             json.dump(meta, f, indent=2, ensure_ascii=False)
+
+
+    @staticmethod
+    def save_suggestions(file_id: str, suggestions):
+
+        meta = FileService._load_meta()
+
+        for file_info in meta:
+
+            if file_info["file_id"] == file_id:
+
+                file_info["suggestions"] = suggestions
+
+                break
+
+        FileService._save_meta(meta)

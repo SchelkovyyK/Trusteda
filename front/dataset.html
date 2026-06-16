@@ -69,10 +69,11 @@
       </nav>
     </header>
 
-    <main class="dataset-main">
+    <main class="dataset-page">
       <button class="back-btn" onclick="window.location.href='/'">
         ← Back
       </button>
+
       <section class="dataset-card">
         <h2 id="fileName">Loading dataset...</h2>
 
@@ -94,7 +95,33 @@
       <section class="dataset-card">
         <h3>Analysis History</h3>
 
-        <div id="history">Loading...</div>
+        <div class="history-search">
+          <input
+            id="historySearch"
+            type="text"
+            placeholder="Search analyses..."
+          />
+        </div>
+
+        <div class="history-table-wrapper">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Analysis</th>
+                <th>Type</th>
+                <th>Reliability</th>
+                <th>Date</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody id="historyBody">
+              <tr>
+                <td colspan="5">Loading...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section class="dataset-card">
@@ -102,10 +129,9 @@
 
         <pre id="report">
 Select a report to view details.
-        </pre>
+    </pre
+        >
       </section>
-
-      
     </main>
 
     <script src="/static/scripts/index.js"></script>

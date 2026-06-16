@@ -2,6 +2,8 @@ const params = new URLSearchParams(window.location.search);
 
 const fileId = params.get("file_id");
 
+let allReports = [];
+
 async function loadDataset() {
   try {
     const res = await fetch(`/dataset/${fileId}`);
@@ -21,7 +23,11 @@ async function loadDataset() {
 
     renderPreview(data.file.preview || [], data.file.columns || []);
 
-    renderHistory(data.reports || []);
+    allReports = data.reports || [];
+
+    allReports.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    renderHistory(allReports);
   } catch (err) {
     console.error(err);
   }
@@ -29,26 +35,26 @@ async function loadDataset() {
 
 function renderDatasetInfo(file) {
   document.getElementById("datasetInfo").innerHTML = `
-        <div>
-            <strong>Created:</strong><br>
-            ${file.created_at}
-        </div>
+    <div>
+      <strong>Created:</strong><br>
+      ${file.created_at}
+    </div>
 
-        <div>
-            <strong>Rows:</strong><br>
-            ${file.stats?.rows ?? "-"}
-        </div>
+    <div>
+      <strong>Rows:</strong><br>
+      ${file.stats?.rows ?? "-"}
+    </div>
 
-        <div>
-            <strong>Columns:</strong><br>
-            ${file.stats?.columns ?? "-"}
-        </div>
+    <div>
+      <strong>Columns:</strong><br>
+      ${file.stats?.columns ?? "-"}
+    </div>
 
-        <div>
-            <strong>Reports:</strong><br>
-            ${file.report_ids?.length ?? 0}
-        </div>
-    `;
+    <div>
+      <strong>Reports:</strong><br>
+      ${file.report_ids?.length ?? 0}
+    </div>
+  `;
 }
 
 function renderPreview(rows, columns) {
@@ -61,10 +67,13 @@ function renderPreview(rows, columns) {
 
   if (!rows.length) {
     body.innerHTML = `
-            <tr>
-                <td>No preview available.</td>
-            </tr>
-        `;
+      <tr>
+        <td colspan="${columns.length || 1}">
+          No preview available.
+        </td>
+      </tr>
+    `;
+
     return;
   }
 
@@ -96,49 +105,90 @@ function renderPreview(rows, columns) {
 }
 
 function renderHistory(reports) {
-  const container = document.getElementById("history");
+  const body = document.getElementById("historyBody");
 
-  container.innerHTML = "";
+  body.innerHTML = "";
 
   if (!reports.length) {
-    container.innerHTML = "<p>No reports generated yet.</p>";
+    body.innerHTML = `
+      <tr>
+        <td colspan="5">
+          No reports generated yet.
+        </td>
+      </tr>
+    `;
 
     return;
   }
 
   reports.forEach((report) => {
-    const div = document.createElement("div");
+    const tr = document.createElement("tr");
 
-    div.className = "report-card";
+    tr.innerHTML = `
+      <td>
+        ${report.insight || "Analysis"}
+      </td>
 
-    div.innerHTML = `
-            <div class="report-title">
-                ${report.insight || "Analysis"}
-            </div>
+      <td>
+        ${report.analysis_type || "-"}
+      </td>
 
-            <div class="report-meta">
-                ${report.created_at}
-            </div>
+      <td>
+        ${
+          report.reliability != null
+            ? Number(report.reliability).toFixed(2)
+            : "-"
+        }
+      </td>
 
-            <div class="report-actions">
-                <button
-                    onclick="openReport('${report.report_id}')"
-                >
-                    Open Report
-                </button>
-            </div>
-        `;
+      <td>
+        ${report.created_at || "-"}
+      </td>
 
-    container.appendChild(div);
+      <td>
+        <button
+          class="open-report-btn"
+          onclick="openReport('${report.report_id}')"
+        >
+          Open
+        </button>
+      </td>
+    `;
+
+    body.appendChild(tr);
   });
 }
 
 async function openReport(reportId) {
-  const res = await fetch(`/report/${reportId}`);
+  try {
+    const res = await fetch(`/report/${reportId}`);
 
-  const data = await res.json();
+    const data = await res.json();
 
-  document.getElementById("report").textContent = JSON.stringify(data, null, 2);
+    document.getElementById("report").textContent = JSON.stringify(
+      data,
+      null,
+      2
+    );
+  } catch (err) {
+    console.error(err);
+
+    document.getElementById("report").textContent = "Failed to load report.";
+  }
 }
+
+document.getElementById("historySearch").addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase();
+
+  const filtered = allReports.filter((report) => {
+    return (
+      (report.insight || "").toLowerCase().includes(query) ||
+      (report.analysis_type || "").toLowerCase().includes(query) ||
+      (report.created_at || "").toLowerCase().includes(query)
+    );
+  });
+
+  renderHistory(filtered);
+});
 
 loadDataset();

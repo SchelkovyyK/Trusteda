@@ -6,18 +6,19 @@ from app.routes import upload, analyze, files
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import dataset
 from app.routes import report
+from app.routes import suggestions
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 app = FastAPI(title="TrustEDA API")
 
-# API
 app.include_router(upload.router)
 app.include_router(analyze.router)
 app.include_router(files.router)
 app.include_router(dataset.router)
 app.include_router(report.router)
+app.include_router(suggestions.router)
 
 
 app.mount("/static", StaticFiles(directory=BASE_DIR / "front"), name="static")
