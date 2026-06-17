@@ -1,0 +1,17 @@
+{
+  "report_id": "bf120395-6397-4215-a377-da6265b6b4fe",
+  "file_id": "dfc1304f-59a8-4223-accb-73a9f191e6d7",
+  "created_at": "2026-06-17 20:23",
+  "insight": "Country analyzed with Subscription Date",
+  "analysis_type": "chi_square",
+  "metrics": {
+    "analysis_type": "chi_square",
+    "primary_metric": 0.9819805060619659,
+    "chi2": 8100.000000000002,
+    "cramers_v": 0.9819805060619659,
+    "p_value": 0.17094894324049173
+  },
+  "stability": 0.0,
+  "reliability": 0.6316204227038034,
+  "llm_report": "The chi-square analysis reveals a non-significant relationship between \"Country\" and \"Subscription Date\" (p-value = 0.1709). Although Cramér's V (0.982) suggests a strong association, the non-significant p-value indicates that this relationship may be due to chance. Practical significance is limited due to the lack of statistical significance. The relationship is likely strong in magnitude but not reliable."
+}

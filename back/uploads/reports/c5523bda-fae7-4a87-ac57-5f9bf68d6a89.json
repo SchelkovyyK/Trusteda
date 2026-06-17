@@ -1,0 +1,17 @@
+{
+  "report_id": "c5523bda-fae7-4a87-ac57-5f9bf68d6a89",
+  "file_id": "5a38d90d-f3dc-4539-8dd7-16b8e433cacc",
+  "created_at": "2026-06-17 09:30",
+  "insight": "Sex analyzed with Survived",
+  "analysis_type": "t_test",
+  "metrics": {
+    "analysis_type": "t_test",
+    "primary_metric": 1.3307840984709824,
+    "t_statistic": -18.67183317725917,
+    "effect_size": 1.3307840984709824,
+    "p_value": 2.2836009226010806e-61
+  },
+  "stability": 0.9006221065732031,
+  "reliability": 0.9701866319719609,
+  "llm_report": "The t-test analysis reveals a significant relationship between Sex and Survived (p-value < 0.001). The effect size (1.33) indicates a strong relationship. Practically, this suggests that the survival rate is significantly different between males and females, with one sex having a substantially higher survival rate than the other. The high reliability (0.97) and stability (0.90) metrics support the consistency of these findings."
+}

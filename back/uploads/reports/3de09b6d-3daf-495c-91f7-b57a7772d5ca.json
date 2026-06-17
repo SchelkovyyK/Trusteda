@@ -1,0 +1,17 @@
+{
+  "report_id": "3de09b6d-3daf-495c-91f7-b57a7772d5ca",
+  "file_id": "5a38d90d-f3dc-4539-8dd7-16b8e433cacc",
+  "created_at": "2026-06-16 19:58",
+  "insight": "Sex analyzed with Age",
+  "analysis_type": "t_test",
+  "metrics": {
+    "analysis_type": "t_test",
+    "primary_metric": 0.19524488050302238,
+    "t_statistic": 2.5258975171938896,
+    "effect_size": 0.19524488050302238,
+    "p_value": 0.011814913211889736
+  },
+  "stability": 0.9278885089987298,
+  "reliability": 0.8236405874148631,
+  "llm_report": "The t-test analysis reveals a statistically significant relationship between Sex and Age (p-value = 0.0118). The effect size is 0.195, indicating a weak to moderate relationship. The practical significance is limited, suggesting that while there is a difference in Age between the two Sex groups, the magnitude of this difference is relatively small."
+}

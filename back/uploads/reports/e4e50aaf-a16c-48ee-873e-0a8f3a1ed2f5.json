@@ -1,0 +1,16 @@
+{
+  "report_id": "e4e50aaf-a16c-48ee-873e-0a8f3a1ed2f5",
+  "file_id": "5a38d90d-f3dc-4539-8dd7-16b8e433cacc",
+  "created_at": "2026-06-16 19:58",
+  "insight": "Survived analyzed with Fare",
+  "analysis_type": "pearson",
+  "metrics": {
+    "analysis_type": "pearson",
+    "primary_metric": 0.2573065223849624,
+    "correlation": 0.2573065223849624,
+    "p_value": 6.1201893419245854e-15
+  },
+  "stability": 0.9757439103386367,
+  "reliability": 0.8427231731015886,
+  "llm_report": "The Pearson correlation analysis reveals a moderate positive relationship between \"Survived\" and \"Fare\" (r = 0.257). The low p-value (6.12e-15) indicates statistical significance. However, the relationship is relatively weak. Practically, this suggests that higher fares are associated with a slightly higher likelihood of survival, but the effect is not substantial."
+}

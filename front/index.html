@@ -140,7 +140,22 @@
         <tbody id="table-body"></tbody>
       </table>
     </div>
+    <button id="datasetInfoBtn">Dataset Guide</button>
+    <div id="modalOverlay" class="modal-overlay hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 id="modalTitle">Title</h3>
+          <button id="modalClose">✕</button>
+        </div>
 
+        <div id="modalBody" class="modal-body">Content</div>
+
+        <div id="modalFooter" class="modal-footer">
+          <button id="modalCancel">Cancel</button>
+          <button id="modalConfirm">Confirm</button>
+        </div>
+      </div>
+    </div>
     <script src="/static/scripts/index.js"></script>
     <script type="module" src="/static/scripts/upload.js"></script>
   </body>

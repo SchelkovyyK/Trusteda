@@ -6,57 +6,39 @@ from app.services.report_service import ReportService
 from app.services.file_service import FileService
 
 
-def bootstrap_stability(df, col1, col2, n=50):
+# ---------------- BOOTSTRAP STABILITY (FIXED) ----------------
+def bootstrap_stability(df, col1, col2, n=30):
 
     values = []
 
     for _ in range(n):
 
-        sample = df.sample(
-            frac=1,
-            replace=True
-        )
+        sample = df.sample(frac=0.8, replace=True)
 
-        result = analyze_relationship(
-            sample,
-            col1,
-            col2
-        )
+        result = analyze_relationship(sample, col1, col2)
 
+        # only numeric metrics are stable
         if "primary_metric" in result:
-            values.append(
-                result["primary_metric"]
-            )
+            values.append(result["primary_metric"])
 
-    if not values:
+    if len(values) < 2:
         return 0.0
 
-    stability = 1 - np.std(values)
+    std = np.std(values)
 
-    return float(
-        max(
-            0.0,
-            min(1.0, stability)
-        )
-    )
+    stability = 1 - std
+
+    return float(max(0.0, min(1.0, stability)))
 
 
-def compute_reliability(
-    metric,
-    p_value,
-    stability
-):
+# ---------------- RELIABILITY (FIXED WEIGHTS) ----------------
+def compute_reliability(metric, p_value, stability):
 
-    significance_score = max(
-        0.0,
-        min(1.0, 1 - p_value)
-    )
+    # significance (lower p = better)
+    significance_score = max(0.0, min(1.0, 1 - p_value))
 
-    effect_score = (
-        1.0
-        if abs(metric) >= 0.5
-        else 0.5
-    )
+    # effect size normalization
+    effect_score = min(1.0, abs(metric))
 
     reliability = (
         0.4 * significance_score +
@@ -64,81 +46,53 @@ def compute_reliability(
         0.3 * stability
     )
 
-    return float(
-        max(
-            0.0,
-            min(1.0, reliability)
-        )
-    )
+    return float(max(0.0, min(1.0, reliability)))
 
 
-def analyze(
-    file_id,
-    df,
-    col1,
-    col2
-):
+# ---------------- MAIN ANALYSIS ----------------
+def analyze(file_id, df, col1, col2):
 
-    result = analyze_relationship(
-        df,
-        col1,
-        col2
-    )
+    result = analyze_relationship(df, col1, col2)
 
     if "error" in result:
         return result
 
-    metric = result["primary_metric"]
+    metric = result.get("primary_metric", 0.0)
+    p_value = result.get("p_value", 1.0)
 
-    p_value = result["p_value"]
+    stability = bootstrap_stability(df, col1, col2)
+    reliability = compute_reliability(metric, p_value, stability)
 
-    stability = bootstrap_stability(
-        df,
-        col1,
-        col2
-    )
-
-    reliability = compute_reliability(
-        metric,
-        p_value,
-        stability
-    )
+    # ---------------- CLEAN RESULT ----------------
+    metrics = {
+        **result,
+        "stability": stability,
+        "reliability": reliability
+    }
 
     analysis_result = {
         "columns": [col1, col2],
         "sample_size": len(df),
         "analysis_type": result["analysis_type"],
-        "metrics": {
-            **result,
-            "stability": stability,
-            "reliability": reliability
-        }
+        "metrics": metrics
     }
 
-    llm_report = generate_llm_report(
-        analysis_result
-    )
+    # ---------------- LLM REPORT ----------------
+    llm_report = generate_llm_report(analysis_result)
 
     report_data = {
-        "insight": (
-            f"{col1} analyzed with {col2}"
-        ),
+        "insight": f"{col1} analyzed with {col2}",
         "analysis_type": result["analysis_type"],
-        "metrics": result,
+        "metrics": metrics,
         "stability": stability,
         "reliability": reliability,
         "llm_report": llm_report
     }
 
-    report_id = ReportService.save_report(
-        file_id,
-        report_data
-    )
+    # ---------------- SAVE ----------------
+    report_id = ReportService.save_report(file_id, report_data)
 
-    FileService.add_report_to_file(
-        file_id,
-        report_id
-    )
+    FileService.add_report_to_file(file_id, report_id)
 
     return {
         "report_id": report_id,

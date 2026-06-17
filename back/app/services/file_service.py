@@ -5,18 +5,19 @@ import json
 from datetime import datetime
 
 UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-
 META_PATH = os.path.join(UPLOAD_DIR, "meta.json")
+
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 class FileService:
 
     @staticmethod
     def save_file(upload_file) -> dict:
-        file_id = str(uuid.uuid4())
 
+        file_id = str(uuid.uuid4())
         original_filename = upload_file.filename
+
         file_path = os.path.join(UPLOAD_DIR, f"{file_id}.csv")
 
         content = upload_file.file.read()
@@ -36,16 +37,15 @@ class FileService:
             "created_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
 
             "stats": {
-                "rows": len(df),
-                "columns": len(df.columns)
+                "rows": int(len(df)),
+                "columns": int(len(df.columns))
             },
 
             "columns": list(df.columns),
-
             "preview": preview_df.to_dict(orient="records"),
 
-            # NEW
-            "report_ids": []
+            "suggestions": [],
+            "suggestion_count": 0
         })
 
         FileService._save_meta(meta)
@@ -59,6 +59,7 @@ class FileService:
 
     @staticmethod
     def load_df(file_id: str) -> pd.DataFrame:
+
         file_path = os.path.join(UPLOAD_DIR, f"{file_id}.csv")
 
         if not os.path.exists(file_path):
@@ -87,35 +88,42 @@ class FileService:
         return {"success": True}
 
     @staticmethod
-    def add_report_to_file(file_id: str, report_id: int):
-        """
-        Додає report_id до конкретного датасету.
-        """
+    def get_file_meta(file_id: str):
 
         meta = FileService._load_meta()
 
         for file_info in meta:
-            if file_info["file_id"] == file_id:
+            if file_info.get("file_id") == file_id:
+                return file_info
 
-                if "report_ids" not in file_info:
-                    file_info["report_ids"] = []
+        return None
 
-                file_info["report_ids"].append(report_id)
+    @staticmethod
+    def save_suggestions(file_id: str, suggestions: list):
+
+        meta = FileService._load_meta()
+
+        for file_info in meta:
+            if file_info.get("file_id") == file_id:
+
+                file_info["suggestions"] = suggestions
+                file_info["suggestion_count"] = len(suggestions)
+                file_info["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")
 
                 break
 
         FileService._save_meta(meta)
 
     @staticmethod
-    def get_file_meta(file_id: str):
+    def get_suggestions(file_id: str):
 
         meta = FileService._load_meta()
 
         for file_info in meta:
-            if file_info["file_id"] == file_id:
-                return file_info
+            if file_info.get("file_id") == file_id:
+                return file_info.get("suggestions", [])
 
-        return None
+        return []
 
     @staticmethod
     def _load_meta():
@@ -126,7 +134,6 @@ class FileService:
         try:
             with open(META_PATH, "r", encoding="utf-8") as f:
                 return json.load(f)
-
         except json.JSONDecodeError:
             return []
 
@@ -135,19 +142,3 @@ class FileService:
 
         with open(META_PATH, "w", encoding="utf-8") as f:
             json.dump(meta, f, indent=2, ensure_ascii=False)
-
-
-    @staticmethod
-    def save_suggestions(file_id: str, suggestions):
-
-        meta = FileService._load_meta()
-
-        for file_info in meta:
-
-            if file_info["file_id"] == file_id:
-
-                file_info["suggestions"] = suggestions
-
-                break
-
-        FileService._save_meta(meta)

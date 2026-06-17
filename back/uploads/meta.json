@@ -95,7 +95,15 @@
     ],
     "report_ids": [
       "ba84a547-3401-46ff-a3c6-1eaa914884db",
-      "ed09fdc5-b173-4a5e-9a09-a6d400a8a35b"
+      "ed09fdc5-b173-4a5e-9a09-a6d400a8a35b",
+      "9c42cbbf-87a1-4cae-9f29-b08f94616845",
+      "3de09b6d-3daf-495c-91f7-b57a7772d5ca",
+      "e4e50aaf-a16c-48ee-873e-0a8f3a1ed2f5",
+      "dd52e854-2791-4dda-baee-c86e1fdd3998",
+      "c5523bda-fae7-4a87-ac57-5f9bf68d6a89",
+      "0fce70b3-b48a-4b08-9a0c-9da60f147510",
+      "10ce9692-af93-4d8b-b991-dbce5b8786c7",
+      "fc8f7dbd-8998-47a7-aea8-2901d395172f"
     ],
     "suggestions": [
       {
@@ -238,6 +246,104 @@
         "priority": 3,
         "reason": "Both columns are numeric."
       }
+    ]
+  },
+  {
+    "file_id": "dfc1304f-59a8-4223-accb-73a9f191e6d7",
+    "filename": "customers-100.csv",
+    "created_at": "2026-06-17 09:28",
+    "stats": {
+      "rows": 100,
+      "columns": 12
+    },
+    "columns": [
+      "Index",
+      "Customer Id",
+      "First Name",
+      "Last Name",
+      "Company",
+      "City",
+      "Country",
+      "Phone 1",
+      "Phone 2",
+      "Email",
+      "Subscription Date",
+      "Website"
+    ],
+    "preview": [
+      {
+        "Index": 1,
+        "Customer Id": "DD37Cf93aecA6Dc",
+        "First Name": "Sheryl",
+        "Last Name": "Baxter",
+        "Company": "Rasmussen Group",
+        "City": "East Leonard",
+        "Country": "Chile",
+        "Phone 1": "229.077.5154",
+        "Phone 2": "397.884.0519x718",
+        "Email": "zunigavanessa@smith.info",
+        "Subscription Date": "2020-08-24",
+        "Website": "http://www.stephenson.com/"
+      },
+      {
+        "Index": 2,
+        "Customer Id": "1Ef7b82A4CAAD10",
+        "First Name": "Preston",
+        "Last Name": "Lozano",
+        "Company": "Vega-Gentry",
+        "City": "East Jimmychester",
+        "Country": "Djibouti",
+        "Phone 1": "5153435776",
+        "Phone 2": "686-620-1820x944",
+        "Email": "vmata@colon.com",
+        "Subscription Date": "2021-04-23",
+        "Website": "http://www.hobbs.com/"
+      },
+      {
+        "Index": 3,
+        "Customer Id": "6F94879bDAfE5a6",
+        "First Name": "Roy",
+        "Last Name": "Berry",
+        "Company": "Murillo-Perry",
+        "City": "Isabelborough",
+        "Country": "Antigua and Barbuda",
+        "Phone 1": "+1-539-402-0259",
+        "Phone 2": "(496)978-3969x58947",
+        "Email": "beckycarr@hogan.com",
+        "Subscription Date": "2020-03-25",
+        "Website": "http://www.lawrence.com/"
+      },
+      {
+        "Index": 4,
+        "Customer Id": "5Cef8BFA16c5e3c",
+        "First Name": "Linda",
+        "Last Name": "Olsen",
+        "Company": "Dominguez, Mcmillan and Donovan",
+        "City": "Bensonview",
+        "Country": "Dominican Republic",
+        "Phone 1": "001-808-617-6467x12895",
+        "Phone 2": "+1-813-324-8756",
+        "Email": "stanleyblackwell@benson.org",
+        "Subscription Date": "2020-06-02",
+        "Website": "http://www.good-lyons.com/"
+      },
+      {
+        "Index": 5,
+        "Customer Id": "053d585Ab6b3159",
+        "First Name": "Joanna",
+        "Last Name": "Bender",
+        "Company": "Martin, Lang and Andrade",
+        "City": "West Priscilla",
+        "Country": "Slovakia (Slovak Republic)",
+        "Phone 1": "001-234-203-0635x76146",
+        "Phone 2": "001-199-446-3860x3486",
+        "Email": "colinalvarado@miles.net",
+        "Subscription Date": "2021-04-17",
+        "Website": "https://goodwin-ingram.com/"
+      }
+    ],
+    "report_ids": [
+      "bf120395-6397-4215-a377-da6265b6b4fe"
     ]
   }
 ]

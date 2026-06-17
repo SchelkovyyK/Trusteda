@@ -9,41 +9,80 @@ from scipy.stats import (
 )
 
 
-def analyze_relationship(df: pd.DataFrame, col1: str, col2: str):
+def _is_date(series: pd.Series) -> bool:
     """
-    Автоматично визначає тип аналізу:
-    - numeric ↔ numeric
-    - categorical ↔ categorical
-    - categorical ↔ numeric
+    Try detect datetime-like columns
+    """
+    try:
+        parsed = pd.to_datetime(series, errors="coerce")
+        return parsed.notna().mean() > 0.8
+    except Exception:
+        return False
 
-    Повертає:
-    {
-        "analysis_type": "...",
-        "primary_metric": ...,
-        "p_value": ...,
-        ...
-    }
+
+def _is_numeric_but_id(series: pd.Series) -> bool:
     """
+    numeric columns that are actually IDs
+    """
+    if not pd.api.types.is_numeric_dtype(series):
+        return False
+
+    non_null = series.dropna()
+    if len(non_null) == 0:
+        return True
+
+    unique_ratio = non_null.nunique() / len(non_null)
+
+    return unique_ratio > 0.95
+
+
+def analyze_relationship(df: pd.DataFrame, col1: str, col2: str):
 
     try:
         data = df[[col1, col2]].copy()
 
-        is_num1 = pd.api.types.is_numeric_dtype(data[col1])
-        is_num2 = pd.api.types.is_numeric_dtype(data[col2])
+        s1 = data[col1]
+        s2 = data[col2]
+
+        is_num1 = pd.api.types.is_numeric_dtype(s1) and not _is_numeric_but_id(s1)
+        is_num2 = pd.api.types.is_numeric_dtype(s2) and not _is_numeric_but_id(s2)
+
+        is_date1 = _is_date(s1)
+        is_date2 = _is_date(s2)
+
+        if (is_date1 and is_num2) or (is_date2 and is_num1):
+
+            date_col = col1 if is_date1 else col2
+            num_col = col2 if is_date1 else col1
+
+            tmp = data[[date_col, num_col]].dropna()
+
+            tmp[date_col] = pd.to_datetime(tmp[date_col], errors="coerce")
+            tmp = tmp.dropna()
+
+            if len(tmp) < 2:
+                return {"error": "Not enough date data"}
+
+            x = tmp[date_col].astype(np.int64) // 10**9
+            y = tmp[num_col]
+
+            corr, p_value = pearsonr(x, y)
+
+            return {
+                "analysis_type": "time_trend",
+                "primary_metric": float(corr),
+                "correlation": float(corr),
+                "p_value": float(p_value)
+            }
 
         if is_num1 and is_num2:
 
-            data = data.dropna()
+            tmp = data.dropna()
 
-            if len(data) < 2:
-                return {
-                    "error": "Not enough numeric data"
-                }
+            if len(tmp) < 2:
+                return {"error": "Not enough numeric data"}
 
-            corr, p_value = pearsonr(
-                data[col1],
-                data[col2]
-            )
+            corr, p_value = pearsonr(tmp[col1], tmp[col2])
 
             return {
                 "analysis_type": "pearson",
@@ -52,35 +91,22 @@ def analyze_relationship(df: pd.DataFrame, col1: str, col2: str):
                 "p_value": float(p_value)
             }
 
-        if (not is_num1) and (not is_num2):
+        if (not is_num1 and not is_num2):
 
-            data = data.dropna()
+            tmp = data.dropna()
 
-            contingency = pd.crosstab(
-                data[col1],
-                data[col2]
-            )
+            contingency = pd.crosstab(tmp[col1], tmp[col2])
 
             if contingency.empty:
-                return {
-                    "error": "Not enough categorical data"
-                }
+                return {"error": "Not enough categorical data"}
 
-            chi2, p_value, _, _ = chi2_contingency(
-                contingency
-            )
+            chi2, p_value, _, _ = chi2_contingency(contingency)
 
             n = contingency.values.sum()
-
             r, k = contingency.shape
 
             cramers_v = np.sqrt(
-                chi2 / (
-                    n * max(
-                        min(r - 1, k - 1),
-                        1
-                    )
-                )
+                chi2 / (n * max(min(r - 1, k - 1), 1))
             )
 
             return {
@@ -91,30 +117,19 @@ def analyze_relationship(df: pd.DataFrame, col1: str, col2: str):
                 "p_value": float(p_value)
             }
 
-        if is_num1:
-            numeric_col = col1
-            categorical_col = col2
-        else:
-            numeric_col = col2
-            categorical_col = col1
+        numeric_col = col1 if is_num1 else col2
+        categorical_col = col2 if is_num1 else col1
 
-        data = data[[categorical_col, numeric_col]].dropna()
+        tmp = data[[categorical_col, numeric_col]].dropna()
 
-        groups = []
-
-        for category in data[categorical_col].unique():
-
-            values = data[
-                data[categorical_col] == category
-            ][numeric_col]
-
-            if len(values) > 1:
-                groups.append(values)
+        groups = [
+            tmp[tmp[categorical_col] == cat][numeric_col]
+            for cat in tmp[categorical_col].unique()
+            if len(tmp[tmp[categorical_col] == cat]) > 1
+        ]
 
         if len(groups) < 2:
-            return {
-                "error": "Not enough groups"
-            }
+            return {"error": "Not enough groups"}
 
         if len(groups) == 2:
 
@@ -125,18 +140,12 @@ def analyze_relationship(df: pd.DataFrame, col1: str, col2: str):
             )
 
             pooled_std = np.sqrt(
-                (
-                    groups[0].std() ** 2 +
-                    groups[1].std() ** 2
-                ) / 2
+                (groups[0].std() ** 2 + groups[1].std() ** 2) / 2
             )
 
-            effect_size = (
-                abs(
-                    groups[0].mean() -
-                    groups[1].mean()
-                ) / pooled_std
-            )
+            effect_size = abs(
+                groups[0].mean() - groups[1].mean()
+            ) / (pooled_std if pooled_std != 0 else 1)
 
             return {
                 "analysis_type": "t_test",
@@ -156,7 +165,4 @@ def analyze_relationship(df: pd.DataFrame, col1: str, col2: str):
         }
 
     except Exception as e:
-
-        return {
-            "error": str(e)
-        }
+        return {"error": str(e)}
