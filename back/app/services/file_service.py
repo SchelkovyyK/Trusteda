@@ -45,7 +45,7 @@ class FileService:
             "preview": preview_df.to_dict(orient="records"),
 
             "suggestions": [],
-            "suggestion_count": 0
+            "suggestion_history": []
         })
 
         FileService._save_meta(meta)
@@ -106,9 +106,17 @@ class FileService:
         for file_info in meta:
             if file_info.get("file_id") == file_id:
 
+                history = file_info.get("suggestion_history", [])
+
+                history.append({
+                    "suggestion_id": str(uuid.uuid4()),
+                    "created_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "count": len(suggestions),
+                    "suggestions": suggestions
+                })
+
+                file_info["suggestion_history"] = history
                 file_info["suggestions"] = suggestions
-                file_info["suggestion_count"] = len(suggestions)
-                file_info["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")
 
                 break
 
@@ -122,6 +130,17 @@ class FileService:
         for file_info in meta:
             if file_info.get("file_id") == file_id:
                 return file_info.get("suggestions", [])
+
+        return []
+
+    @staticmethod
+    def get_suggestion_history(file_id: str):
+
+        meta = FileService._load_meta()
+
+        for file_info in meta:
+            if file_info.get("file_id") == file_id:
+                return file_info.get("suggestion_history", [])
 
         return []
 

@@ -93,13 +93,13 @@
       </section>
 
       <section class="dataset-card">
-        <h3>Analysis History</h3>
+        <h3>Analysis Reports</h3>
 
         <div class="history-search">
           <input
             id="historySearch"
             type="text"
-            placeholder="Search analyses..."
+            placeholder="Search reports..."
           />
         </div>
 
@@ -111,24 +111,35 @@
                 <th>Type</th>
                 <th>Reliability</th>
                 <th>Date</th>
-                <th></th>
+                <th class="actions-column"></th>
               </tr>
             </thead>
-
-            <tbody id="historyBody">
-              <tr>
-                <td colspan="5">Loading...</td>
-              </tr>
-            </tbody>
+            <tbody id="historyBody"></tbody>
           </table>
         </div>
       </section>
-
       <section class="dataset-card">
-        <h3>Selected Report</h3>
+        <h3>Suggestion History</h3>
+
+        <div class="history-table-wrapper">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Generated</th>
+                <th>Count</th>
+                <th>Suggestion ID</th>
+                <th class="actions-column"></th>
+              </tr>
+            </thead>
+            <tbody id="suggestionsBody"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="dataset-card">
+        <h3>Selected</h3>
 
         <pre id="report">
-Select a report to view details.
+Select to view details.
     </pre
         >
       </section>
