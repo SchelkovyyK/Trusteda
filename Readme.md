@@ -578,10 +578,6 @@ http://127.0.0.1:8000
 
 ---
 
-# Author
-
-Bachelor Project
-
 TrustEDA — Intelligent Exploratory Data Analysis Platform
 
 2026
