@@ -1,0 +1,18 @@
+{
+  "report_id": "55816f01-2671-4750-ba61-840383e679cf",
+  "file_id": "5a38d90d-f3dc-4539-8dd7-16b8e433cacc",
+  "created_at": "2026-06-24 20:03",
+  "insight": "Ticket analyzed with Survived",
+  "analysis_type": "anova",
+  "metrics": {
+    "analysis_type": "anova",
+    "primary_metric": 3.027615536357271,
+    "f_statistic": 3.027615536357271,
+    "p_value": 3.3056232354472933e-13,
+    "stability": 0.0,
+    "reliability": 0.6999999999998678
+  },
+  "stability": 0.0,
+  "reliability": 0.6999999999998678,
+  "llm_report": "The analysis of variance results show a statistically significant relationship, with a p-value of 3.31e-13, which is well below the typical significance threshold. The f-statistic of 3.03 indicates a moderate effect strength. Given the extremely low p-value, it can be concluded that the relationship between the variables is highly significant. The practical meaning of this result is that there is a strong association between the Ticket and Survived variables. The reliability of 0.7 suggests that the results are somewhat consistent, but may not be entirely stable. Overall, the results suggest a notable relationship between the variables."
+}

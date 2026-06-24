@@ -1,0 +1,19 @@
+{
+  "report_id": "3d159951-0c5c-463c-aac9-d631c96787a9",
+  "file_id": "5a38d90d-f3dc-4539-8dd7-16b8e433cacc",
+  "created_at": "2026-06-24 19:21",
+  "insight": "Sex analyzed with Embarked",
+  "analysis_type": "chi_square",
+  "metrics": {
+    "analysis_type": "chi_square",
+    "primary_metric": 0.12256919037251324,
+    "chi2": 13.355630515001746,
+    "cramers_v": 0.12256919037251324,
+    "p_value": 0.0012585245232290142,
+    "stability": 0.9594248101621017,
+    "reliability": 0.7240947903510928
+  },
+  "stability": 0.9594248101621017,
+  "reliability": 0.7240947903510928,
+  "llm_report": "The chi-square analysis between Sex and Embarked reveals a statistically significant relationship, with a p-value of 0.0012585245232290142, which is less than the typical significance threshold of 0.05. The strength of this relationship is moderate, as indicated by Cramers V of 0.12256919037251324. This suggests that there is a notable association between the Sex of a passenger and their Embarked location. The practical meaning of this result is that the sex of a passenger is related to the port where they embarked, which could be useful for understanding passenger demographics. The result is also reliable, with a reliability metric of 0.7240947903510928. Overall, the analysis suggests a significant and moderately strong relationship between Sex and Embarked."
+}

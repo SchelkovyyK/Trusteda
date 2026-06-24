@@ -87,6 +87,16 @@ class SuggestionHistoryService:
         return history
 
     @staticmethod
+    def delete_suggestion(suggestion_id: str) -> bool:
+        path = os.path.join(SUGGESTIONS_DIR, f"{suggestion_id}.json")
+
+        if not os.path.exists(path):
+            return False
+
+        os.remove(path)
+        return True
+
+    @staticmethod
     def delete_by_file(file_id: str):
 
         if not os.path.exists(SUGGESTIONS_DIR):

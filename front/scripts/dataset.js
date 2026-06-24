@@ -276,9 +276,16 @@ async function openSuggestion(suggestionId) {
   try {
     const res = await fetch(`/suggestion/${suggestionId}`);
     const data = await res.json();
+
+    if (!res.ok || data.error) {
+      updateSelectedBlock({ error: data.error || "Failed to load suggestion." });
+      return;
+    }
+
     updateSelectedBlock(data);
   } catch (err) {
     console.error(err);
+    updateSelectedBlock({ error: "Failed to load suggestion." });
   }
 }
 
@@ -286,13 +293,16 @@ async function openReport(reportId) {
   try {
     const res = await fetch(`/report/${reportId}`);
     const data = await res.json();
+
+    if (!res.ok || data.error) {
+      updateSelectedBlock({ error: data.error || "Failed to load report." });
+      return;
+    }
+
     updateSelectedBlock(data);
   } catch (err) {
     console.error(err);
-    if (reportElement) {
-      reportElement.style.display = "block";
-      reportElement.textContent = "Failed to load report.";
-    }
+    updateSelectedBlock({ error: "Failed to load report." });
   }
 }
 
@@ -307,11 +317,15 @@ document.addEventListener("click", () => {
 });
 
 function deleteReport(reportId) {
-  loadDataset();
+  fetch(`/report/${reportId}`, { method: "DELETE" })
+    .then(() => loadDataset())
+    .catch((err) => console.error(err));
 }
 
 function deleteSuggestion(suggestionId) {
-  loadDataset();
+  fetch(`/suggestion/${suggestionId}`, { method: "DELETE" })
+    .then(() => loadDataset())
+    .catch((err) => console.error(err));
 }
 
 if (historySearchElement) {

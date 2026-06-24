@@ -2,29 +2,9 @@ from fastapi import APIRouter
 from app.services.file_service import FileService
 from app.services.report_service import ReportService
 from app.services.suggestion_history_service import SuggestionHistoryService
-import math
+from app.utils.serialization import clean_json
 
 router = APIRouter()
-
-
-def clean(obj):
-    """
-    Recursively convert NaN / Inf → None
-    so JSON serialization never crashes
-    """
-
-    if isinstance(obj, float):
-        if math.isnan(obj) or math.isinf(obj):
-            return None
-        return obj
-
-    if isinstance(obj, dict):
-        return {k: clean(v) for k, v in obj.items()}
-
-    if isinstance(obj, list):
-        return [clean(v) for v in obj]
-
-    return obj
 
 
 @router.get("/dataset/{file_id}")
@@ -39,15 +19,15 @@ def get_dataset(file_id: str):
         for report_id in file_meta.get("report_ids", []):
             report = ReportService.load_report(report_id)
             if report:
-                reports.append(clean(report))
+                reports.append(report)
 
         suggestion_history = SuggestionHistoryService.list_by_file(file_id)
 
-        return {
-            "file": clean(file_meta),
-            "reports": clean(reports),
-            "suggestion_history": clean(suggestion_history)
-        }
+        return clean_json({
+            "file": file_meta,
+            "reports": reports,
+            "suggestion_history": suggestion_history
+        })
 
     except Exception as e:
         return {"error": str(e)}

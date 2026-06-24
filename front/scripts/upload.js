@@ -160,6 +160,9 @@ async function runAnalysis() {
   if (!currentFileId) return alert("Select dataset first");
   const col1 = document.getElementById("col1").value;
   const col2 = document.getElementById("col2").value;
+
+  if (!col1 || !col2) return alert("Select both columns");
+
   try {
     const res = await fetch(
       `/analyze?file_id=${currentFileId}&col1=${encodeURIComponent(
@@ -168,6 +171,11 @@ async function runAnalysis() {
       { method: "POST" }
     );
     const data = await res.json();
+
+    if (!res.ok) {
+      renderInsight({ error: data.detail || data.error || "Analysis failed" });
+      return;
+    }
 
     if (data.tokens_exhausted || data.status === 429) {
       triggerTokenExhaustionAlert();
