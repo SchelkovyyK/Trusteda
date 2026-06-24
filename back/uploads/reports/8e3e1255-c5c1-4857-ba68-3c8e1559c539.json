@@ -1,0 +1,18 @@
+{
+  "report_id": "8e3e1255-c5c1-4857-ba68-3c8e1559c539",
+  "file_id": "5a38d90d-f3dc-4539-8dd7-16b8e433cacc",
+  "created_at": "2026-06-24 19:03",
+  "insight": "Survived analyzed with Pclass",
+  "analysis_type": "pearson",
+  "metrics": {
+    "analysis_type": "pearson",
+    "primary_metric": -0.33848103596101514,
+    "correlation": -0.33848103596101514,
+    "p_value": 2.537047387981532e-25,
+    "stability": 0.9661532287468988,
+    "reliability": 0.7913902794123742
+  },
+  "stability": 0.9661532287468988,
+  "reliability": 0.7913902794123742,
+  "llm_report": "The analysis reveals a statistically significant negative correlation between Survived and Pclass, with a p-value of 2.54e-25, indicating that the relationship is highly unlikely to be due to chance. The correlation coefficient of -0.34 suggests a moderate negative relationship, meaning that as Pclass increases, the likelihood of survival tends to decrease. The practical meaning of this finding is that passengers in higher social classes, as indicated by lower Pclass values, were more likely to survive. The strength of this effect is moderate, and the result is reliable and stable, with a reliability of 0.79 and stability of 0.97. Overall, the data suggests a notable association between social class and survival rates."
+}

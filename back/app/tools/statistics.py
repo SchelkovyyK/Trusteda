@@ -1,3 +1,4 @@
+import math
 import pandas as pd
 import numpy as np
 
@@ -9,10 +10,25 @@ from scipy.stats import (
 )
 
 
+def _safe_float(value):
+    if value is None:
+        return None
+
+    f = float(value)
+
+    if math.isnan(f) or math.isinf(f):
+        return None
+
+    return f
+
+
 def _is_date(series: pd.Series) -> bool:
     """
-    Try detect datetime-like columns
+    Try detect datetime-like columns (non-numeric only).
     """
+    if pd.api.types.is_numeric_dtype(series):
+        return False
+
     try:
         parsed = pd.to_datetime(series, errors="coerce")
         return parsed.notna().mean() > 0.8
@@ -70,9 +86,9 @@ def analyze_relationship(df: pd.DataFrame, col1: str, col2: str):
 
             return {
                 "analysis_type": "time_trend",
-                "primary_metric": float(corr),
-                "correlation": float(corr),
-                "p_value": float(p_value)
+                "primary_metric": _safe_float(corr),
+                "correlation": _safe_float(corr),
+                "p_value": _safe_float(p_value)
             }
 
         if is_num1 and is_num2:
@@ -86,9 +102,9 @@ def analyze_relationship(df: pd.DataFrame, col1: str, col2: str):
 
             return {
                 "analysis_type": "pearson",
-                "primary_metric": float(corr),
-                "correlation": float(corr),
-                "p_value": float(p_value)
+                "primary_metric": _safe_float(corr),
+                "correlation": _safe_float(corr),
+                "p_value": _safe_float(p_value)
             }
 
         if (not is_num1 and not is_num2):
@@ -111,10 +127,10 @@ def analyze_relationship(df: pd.DataFrame, col1: str, col2: str):
 
             return {
                 "analysis_type": "chi_square",
-                "primary_metric": float(cramers_v),
-                "chi2": float(chi2),
-                "cramers_v": float(cramers_v),
-                "p_value": float(p_value)
+                "primary_metric": _safe_float(cramers_v),
+                "chi2": _safe_float(chi2),
+                "cramers_v": _safe_float(cramers_v),
+                "p_value": _safe_float(p_value)
             }
 
         numeric_col = col1 if is_num1 else col2
@@ -149,19 +165,19 @@ def analyze_relationship(df: pd.DataFrame, col1: str, col2: str):
 
             return {
                 "analysis_type": "t_test",
-                "primary_metric": float(effect_size),
-                "t_statistic": float(stat),
-                "effect_size": float(effect_size),
-                "p_value": float(p_value)
+                "primary_metric": _safe_float(effect_size),
+                "t_statistic": _safe_float(stat),
+                "effect_size": _safe_float(effect_size),
+                "p_value": _safe_float(p_value)
             }
 
         stat, p_value = f_oneway(*groups)
 
         return {
             "analysis_type": "anova",
-            "primary_metric": float(stat),
-            "f_statistic": float(stat),
-            "p_value": float(p_value)
+            "primary_metric": _safe_float(stat),
+            "f_statistic": _safe_float(stat),
+            "p_value": _safe_float(p_value)
         }
 
     except Exception as e:

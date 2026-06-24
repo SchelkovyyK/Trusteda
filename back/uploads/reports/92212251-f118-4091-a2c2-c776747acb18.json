@@ -1,0 +1,19 @@
+{
+  "report_id": "92212251-f118-4091-a2c2-c776747acb18",
+  "file_id": "dfc1304f-59a8-4223-accb-73a9f191e6d7",
+  "created_at": "2026-06-24 19:32",
+  "insight": "Country analyzed with City",
+  "analysis_type": "chi_square",
+  "metrics": {
+    "analysis_type": "chi_square",
+    "primary_metric": 1.0,
+    "chi2": 8400.0,
+    "cramers_v": 1.0,
+    "p_value": 0.25645161811476136,
+    "stability": 0.9999999999999999,
+    "reliability": 0.8974193527540953
+  },
+  "stability": 0.9999999999999999,
+  "reliability": 0.8974193527540953,
+  "llm_report": "The chi-square analysis between Country and City yields a p-value of 0.256, indicating that the relationship between the two variables is not statistically significant. The chi2 value is 8400, but given the non-significant p-value, this result should be interpreted with caution. The effect strength, as measured by Cramers V, is 1.0, suggesting a strong association, but this must be tempered by the lack of statistical significance. The practical meaning of this result is that there is no reliable evidence to suggest a significant relationship between Country and City. The analysis should be repeated with a larger sample size or alternative methods to confirm these findings."
+}

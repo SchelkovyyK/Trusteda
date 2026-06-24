@@ -1,5 +1,4 @@
-from fastapi import APIRouter
-
+from fastapi import APIRouter, HTTPException
 from app.services.file_service import FileService
 from app.services.analysis_service import analyze
 from app.services.suggestion_service import SuggestionService
@@ -16,15 +15,26 @@ def run_analysis(
     col1: str,
     col2: str
 ):
+    try:
+        df = FileService.load_df(file_id)
 
-    df = FileService.load_df(file_id)
+        result = analyze(
+            file_id,
+            df,
+            col1,
+            col2
+        )
 
-    return analyze(
-        file_id,
-        df,
-        col1,
-        col2
-    )
+        if result.get("error"):
+            raise HTTPException(status_code=400, detail=result["error"])
+
+        return result
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="File not found")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/suggest-analysis")

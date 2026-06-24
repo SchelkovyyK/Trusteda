@@ -12,6 +12,9 @@ client = Groq(
 
 def generate_llm_report(data):
 
+    if not os.getenv("GROQ_KEY"):
+        return "LLM report unavailable (GROQ_KEY not configured)."
+
     prompt = f"""
 You are a senior data analyst.
 

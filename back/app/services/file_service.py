@@ -4,6 +4,9 @@ import pandas as pd
 import json
 from datetime import datetime
 
+from app.services.report_service import ReportService
+from app.services.suggestion_history_service import SuggestionHistoryService
+
 UPLOAD_DIR = "uploads"
 META_PATH = os.path.join(UPLOAD_DIR, "meta.json")
 
@@ -44,8 +47,9 @@ class FileService:
             "columns": list(df.columns),
             "preview": preview_df.to_dict(orient="records"),
 
+            "report_ids": [],
             "suggestions": [],
-            "suggestion_count": 0
+            "suggestion_history": []
         })
 
         FileService._save_meta(meta)
@@ -79,6 +83,9 @@ class FileService:
         if os.path.exists(file_path):
             os.remove(file_path)
 
+        ReportService.delete_by_file(file_id)
+        SuggestionHistoryService.delete_by_file(file_id)
+
         meta = FileService._load_meta()
 
         meta = [x for x in meta if x["file_id"] != file_id]
@@ -86,6 +93,21 @@ class FileService:
         FileService._save_meta(meta)
 
         return {"success": True}
+
+    @staticmethod
+    def remove_report_from_file(file_id: str, report_id: str):
+
+        meta = FileService._load_meta()
+
+        for file_info in meta:
+            if file_info.get("file_id") == file_id:
+                report_ids = file_info.get("report_ids", [])
+                file_info["report_ids"] = [
+                    rid for rid in report_ids if rid != report_id
+                ]
+                break
+
+        FileService._save_meta(meta)
 
     @staticmethod
     def get_file_meta(file_id: str):
@@ -106,9 +128,17 @@ class FileService:
         for file_info in meta:
             if file_info.get("file_id") == file_id:
 
+                history = file_info.get("suggestion_history", [])
+
+                history.append({
+                    "suggestion_id": str(uuid.uuid4()),
+                    "created_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "count": len(suggestions),
+                    "suggestions": suggestions
+                })
+
+                file_info["suggestion_history"] = history
                 file_info["suggestions"] = suggestions
-                file_info["suggestion_count"] = len(suggestions)
-                file_info["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")
 
                 break
 
@@ -124,6 +154,34 @@ class FileService:
                 return file_info.get("suggestions", [])
 
         return []
+
+    @staticmethod
+    def get_suggestion_history(file_id: str):
+
+        meta = FileService._load_meta()
+
+        for file_info in meta:
+            if file_info.get("file_id") == file_id:
+                return file_info.get("suggestion_history", [])
+
+        return []
+
+    @staticmethod
+    def add_report_to_file(file_id: str, report_id: str):
+
+        meta = FileService._load_meta()
+
+        for file_info in meta:
+            if file_info.get("file_id") == file_id:
+                report_ids = file_info.get("report_ids", [])
+
+                if report_id not in report_ids:
+                    report_ids.append(report_id)
+
+                file_info["report_ids"] = report_ids
+                break
+
+        FileService._save_meta(meta)
 
     @staticmethod
     def _load_meta():

@@ -1,0 +1,19 @@
+{
+  "report_id": "a7f63cdf-a1c9-43fd-a19e-59b3929c24c6",
+  "file_id": "dfc1304f-59a8-4223-accb-73a9f191e6d7",
+  "created_at": "2026-06-24 19:32",
+  "insight": "City analyzed with Company",
+  "analysis_type": "chi_square",
+  "metrics": {
+    "analysis_type": "chi_square",
+    "primary_metric": 1.0,
+    "chi2": 9800.0,
+    "cramers_v": 1.0,
+    "p_value": 0.24010854098953147,
+    "stability": 0.9999999999999999,
+    "reliability": 0.9039565836041873
+  },
+  "stability": 0.9999999999999999,
+  "reliability": 0.9039565836041873,
+  "llm_report": "The chi-square analysis between City and Company reveals a p-value of 0.2401, indicating that the relationship between the two variables is not statistically significant. The chi2 value is 9800, but given the large p-value, this result should be interpreted with caution. The effect strength, as measured by Cramers V, is 1.0, suggesting a strong association, but this must be considered in the context of the non-significant p-value. The practical meaning of this result is limited due to the lack of statistical significance, and therefore, no conclusive inferences can be made about the relationship between City and Company. The analysis should be treated with skepticism and may require further investigation or additional data to draw meaningful conclusions."
+}

@@ -1,0 +1,19 @@
+{
+  "report_id": "d4fc7a73-de91-4edf-9a88-062057fac052",
+  "file_id": "dfc1304f-59a8-4223-accb-73a9f191e6d7",
+  "created_at": "2026-06-24 19:32",
+  "insight": "Country analyzed with Company",
+  "analysis_type": "chi_square",
+  "metrics": {
+    "analysis_type": "chi_square",
+    "primary_metric": 0.9970193674385764,
+    "chi2": 8350.0,
+    "cramers_v": 0.9970193674385764,
+    "p_value": 0.17866508110808926,
+    "stability": 0.9962092155852796,
+    "reliability": 0.926502542463921
+  },
+  "stability": 0.9962092155852796,
+  "reliability": 0.926502542463921,
+  "llm_report": "The chi-square analysis between Country and Company reveals a p-value of 0.17866508110808926, indicating that the relationship between the two variables is not statistically significant. The Cramers V metric of 0.9970193674385764 suggests a very strong association between the variables. However, due to the lack of statistical significance, the practical meaning of this relationship is limited. The large chi-square value of 8350.0 is likely driven by the large sample size, but it does not translate to statistical significance in this case. The results should be interpreted with caution, considering the non-significant p-value."
+}
