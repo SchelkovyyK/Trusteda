@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from app.services.file_service import FileService
 from app.services.report_service import ReportService
+from app.services.suggestion_history_service import SuggestionHistoryService
 import math
 
 router = APIRouter()
@@ -27,7 +28,6 @@ def clean(obj):
 
 
 @router.get("/dataset/{file_id}")
-@router.get("/dataset/{file_id}")
 def get_dataset(file_id: str):
     try:
         file_meta = FileService.get_file_meta(file_id)
@@ -41,7 +41,7 @@ def get_dataset(file_id: str):
             if report:
                 reports.append(clean(report))
 
-        suggestion_history = FileService.get_suggestion_history(file_id)
+        suggestion_history = SuggestionHistoryService.list_by_file(file_id)
 
         return {
             "file": clean(file_meta),

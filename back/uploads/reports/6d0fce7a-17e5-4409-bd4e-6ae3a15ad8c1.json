@@ -1,0 +1,18 @@
+{
+  "report_id": "6d0fce7a-17e5-4409-bd4e-6ae3a15ad8c1",
+  "file_id": "5a38d90d-f3dc-4539-8dd7-16b8e433cacc",
+  "created_at": "2026-06-23 11:41",
+  "insight": "Pclass analyzed with Age",
+  "analysis_type": "time_trend",
+  "metrics": {
+    "analysis_type": "time_trend",
+    "primary_metric": NaN,
+    "correlation": NaN,
+    "p_value": NaN,
+    "stability": 1.0,
+    "reliability": 1.0
+  },
+  "stability": 1.0,
+  "reliability": 1.0,
+  "llm_report": "The analysis results are incomplete as the primary metric, correlation, and p-value are not provided. Therefore, it is not possible to determine the statistical significance or effect strength of the relationship between Pclass and Age. The stability and reliability of the analysis are reported as 1.0, but without further context, the practical meaning of this is unclear. The sample size is 891, which may be sufficient for certain types of analysis, but without more information, it is difficult to draw any conclusions. The analysis type is reported as a time trend, but without actual results, no interpretation can be made. The lack of data prevents a meaningful statistical interpretation."
+}

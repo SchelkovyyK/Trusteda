@@ -11,3 +11,13 @@ def get_suggestions(file_id: str):
     return SuggestionHistoryService.list_by_file(
         file_id
     )
+
+
+@router.get("/suggestion/{suggestion_id}")
+def get_suggestion(suggestion_id: str):
+    data = SuggestionHistoryService.load_suggestion(suggestion_id)
+
+    if not data:
+        return {"error": "suggestion not found"}
+
+    return data

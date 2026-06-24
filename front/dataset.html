@@ -74,19 +74,13 @@
         ← Back
       </button>
 
-      <section class="dataset-card">
-        <h2 id="fileName">Loading dataset...</h2>
-
-        <div id="datasetInfo" class="dataset-meta">Loading dataset info...</div>
-      </section>
+      <div id="datasetInfo">Loading dataset info...</div>
 
       <section class="dataset-card">
         <h3>Dataset Preview</h3>
-
         <div class="table-wrapper">
           <table class="data-table">
             <thead id="previewHead"></thead>
-
             <tbody id="previewBody"></tbody>
           </table>
         </div>
@@ -94,7 +88,6 @@
 
       <section class="dataset-card">
         <h3>Analysis Reports</h3>
-
         <div class="history-search">
           <input
             id="historySearch"
@@ -102,7 +95,6 @@
             placeholder="Search reports..."
           />
         </div>
-
         <div class="history-table-wrapper">
           <table class="history-table">
             <thead>
@@ -118,9 +110,9 @@
           </table>
         </div>
       </section>
+
       <section class="dataset-card">
         <h3>Suggestion History</h3>
-
         <div class="history-table-wrapper">
           <table class="history-table">
             <thead>
@@ -135,15 +127,26 @@
           </table>
         </div>
       </section>
+
       <section class="dataset-card">
         <h3>Selected</h3>
-
-        <pre id="report">
-Select to view details.
-    </pre
-        >
+        <pre id="report">Select to view details.</pre>
       </section>
     </main>
+
+    <div id="modalOverlay" class="modal-overlay hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 id="modalTitle">Title</h3>
+          <button id="modalClose">✕</button>
+        </div>
+        <div id="modalBody" class="modal-body">Content</div>
+        <div class="modal-footer">
+          <button id="modalCancel">Cancel</button>
+          <button id="modalConfirm">Confirm</button>
+        </div>
+      </div>
+    </div>
 
     <script src="/static/scripts/index.js"></script>
     <script src="/static/scripts/dataset.js"></script>
